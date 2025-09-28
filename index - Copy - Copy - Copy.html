@@ -1,0 +1,3983 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Construction Site Management System</title>
+  <style>
+    :root {
+      --primary: #0056b3;
+      --secondary: #28a745;
+      --danger: #dc3545;
+      --warning: #ffc107;
+      --light: #f8f9fa;
+      --dark: #343a40;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f0f2f5;
+      color: #333;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+
+    header {
+      background: var(--primary);
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1, h2, h3 {
+      margin: 0;
+    }
+
+    h2 {
+      color: var(--primary);
+      border-bottom: 2px solid var(--primary);
+      padding-bottom: 8px;
+      margin: 25px 0 15px;
+    }
+
+    .form-section {
+      padding: 20px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 15px;
+    }
+
+    .form-group {
+      flex: 1;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-sizing: border-box;
+      font-size: 14px;
+    }
+
+    textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+      background: white;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: center;
+    }
+
+    th {
+      background: var(--primary);
+      color: white;
+      font-weight: bold;
+    }
+
+    .btn {
+      background: var(--primary);
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin: 5px;
+      font-size: 14px;
+      transition: all 0.3s;
+    }
+
+    .btn:hover {
+      background: #004494;
+      transform: translateY(-2px);
+    }
+
+    .btn-success {
+      background: var(--secondary);
+    }
+
+    .btn-success:hover {
+      background: #218838;
+    }
+
+    .btn-danger {
+      background: var(--danger);
+    }
+
+    .btn-danger:hover {
+      background: #c82333;
+    }
+
+    .btn-warning {
+      background: var(--warning);
+      color: var(--dark);
+    }
+
+    .btn-warning:hover {
+      background: #e0a800;
+    }
+
+    .btn-info {
+      background: #17a2b8;
+    }
+
+    .btn-info:hover {
+      background: #138496;
+    }
+
+    .signature-box {
+      border: 1px dashed #666;
+      height: 100px;
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #666;
+      background: #f9f9f9;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .signature-box.signed {
+      background: #e8f5e9;
+      color: #2e7d32;
+      font-weight: bold;
+    }
+
+    .preview-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .preview-item {
+      position: relative;
+      width: 150px;
+      height: 150px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .preview-img, .preview-video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .remove-preview {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      background: rgba(220, 53, 69, 0.8);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .summary-box {
+      background: #e9ecef;
+      padding: 15px;
+      border-radius: 6px;
+      margin-top: 15px;
+    }
+
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid #ddd;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+
+    .tab {
+      padding: 10px 20px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      border-bottom: none;
+      border-radius: 6px 6px 0 0;
+      margin-right: 5px;
+      margin-bottom: 5px;
+    }
+
+    .tab.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    .tab-content {
+      display: none;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-top: none;
+      border-radius: 0 0 6px 6px;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .action-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      padding: 20px;
+      background: #f8f9fa;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .saved-reports {
+      margin-top: 30px;
+    }
+
+    .report-item {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 15px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .report-info {
+      flex: 1;
+    }
+
+    .report-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .canvas-container {
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      margin: 15px 0;
+      padding: 10px;
+      background: white;
+    }
+
+    .drawing-tools {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    .drawing-tool {
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      background: white;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .drawing-tool.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    #drawingCanvas {
+      border: 1px solid #ccc;
+      background: white;
+      cursor: crosshair;
+      max-width: 100%;
+    }
+
+    .communication-panel {
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      margin: 15px 0;
+      overflow: hidden;
+    }
+
+    .chat-header {
+      background: var(--primary);
+      color: white;
+      padding: 10px 15px;
+      font-weight: bold;
+    }
+
+    .chat-messages {
+      height: 300px;
+      overflow-y: auto;
+      padding: 15px;
+      background: #f9f9f9;
+    }
+
+    .message {
+      margin-bottom: 15px;
+      padding: 10px;
+      border-radius: 6px;
+      max-width: 80%;
+    }
+
+    .message.sent {
+      background: #e3f2fd;
+      margin-left: auto;
+    }
+
+    .message.received {
+      background: #f5f5f5;
+    }
+
+    .message-sender {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .message-time {
+      font-size: 0.8em;
+      color: #666;
+      text-align: right;
+    }
+
+    .chat-input {
+      display: flex;
+      padding: 10px;
+      background: white;
+      border-top: 1px solid #ddd;
+    }
+
+    .chat-input input {
+      flex: 1;
+      margin-right: 10px;
+    }
+
+    .login-container {
+      max-width: 400px;
+      margin: 50px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    .status-indicator {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 5px;
+    }
+
+    .status-online {
+      background: var(--secondary);
+    }
+
+    .status-offline {
+      background: #ccc;
+    }
+
+    .complaint-item {
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 15px;
+      margin-bottom: 15px;
+    }
+
+    .complaint-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .complaint-status {
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 0.8em;
+      font-weight: bold;
+    }
+
+    .status-open {
+      background: #ffebee;
+      color: var(--danger);
+    }
+
+    .status-resolved {
+      background: #e8f5e9;
+      color: var(--secondary);
+    }
+
+    .complaint-reply {
+      background: #f5f5f5;
+      padding: 10px;
+      border-radius: 6px;
+      margin-top: 10px;
+    }
+
+    .personnel-card {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .personnel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .personnel-status {
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 0.8em;
+      font-weight: bold;
+    }
+
+    .status-present {
+      background: #e8f5e9;
+      color: var(--secondary);
+    }
+
+    .status-off {
+      background: #ffebee;
+      color: var(--danger);
+    }
+
+    .personnel-details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .material-status {
+      background: #e8f5e9;
+      padding: 10px;
+      border-radius: 6px;
+      margin: 10px 0;
+      border-left: 4px solid var(--secondary);
+    }
+
+    .material-warning {
+      background: #fff3cd;
+      border-left: 4px solid var(--warning);
+    }
+
+    .material-danger {
+      background: #f8d7da;
+      border-left: 4px solid var(--danger);
+    }
+
+    .export-buttons {
+      display: flex;
+      gap: 10px;
+      margin: 15px 0;
+    }
+
+    .vehicle-schedule {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 6px;
+      margin: 15px 0;
+    }
+
+    .auth-tabs {
+      display: flex;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .auth-tab {
+      padding: 10px 20px;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+    }
+
+    .auth-tab.active {
+      border-bottom: 3px solid var(--primary);
+      font-weight: bold;
+    }
+
+    .file-input {
+      margin-top: 10px;
+    }
+
+    .proof-container {
+      margin-top: 10px;
+    }
+
+    .proof-image {
+      max-width: 200px;
+      max-height: 200px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      margin: 5px;
+    }
+
+    .file-format-info {
+      font-size: 0.8em;
+      color: #666;
+      margin-top: 5px;
+    }
+
+    .file-type-badge {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.7em;
+      font-weight: bold;
+      margin-left: 5px;
+    }
+
+    .badge-pdf {
+      background: #ff6b6b;
+      color: white;
+    }
+
+    .badge-cad {
+      background: #4ecdc4;
+      color: white;
+    }
+
+    .badge-360 {
+      background: #45b7d1;
+      color: white;
+    }
+
+    /* New styles for Materials Status */
+    .material-category {
+      margin-bottom: 30px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+    }
+
+    .material-category h3 {
+      color: var(--primary);
+      margin-bottom: 15px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .material-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .material-item:last-child {
+      border-bottom: none;
+    }
+
+    .material-info {
+      flex: 1;
+    }
+
+    .material-name {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .material-details {
+      display: flex;
+      gap: 15px;
+      font-size: 0.9em;
+      color: #666;
+    }
+
+    .material-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .stock-level {
+      width: 150px;
+      height: 10px;
+      background: #e9ecef;
+      border-radius: 5px;
+      overflow: hidden;
+      margin: 5px 0;
+    }
+
+    .stock-fill {
+      height: 100%;
+      border-radius: 5px;
+      transition: width 0.3s;
+    }
+
+    .stock-low {
+      background: var(--danger);
+    }
+
+    .stock-medium {
+      background: var(--warning);
+    }
+
+    .stock-high {
+      background: var(--secondary);
+    }
+
+    .stock-info {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8em;
+      color: #666;
+    }
+
+    /* New styles for site management */
+    .site-item {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .site-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .site-status {
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 0.8em;
+      font-weight: bold;
+    }
+
+    .status-active {
+      background: #e8f5e9;
+      color: var(--secondary);
+    }
+
+    .status-inactive {
+      background: #ffebee;
+      color: var(--danger);
+    }
+
+    .site-details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .pending-users {
+      margin-top: 20px;
+    }
+
+    .pending-user-item {
+      background: #f8f9fa;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 10px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .user-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    /* Admin panel specific styles */
+    .admin-section {
+      margin-bottom: 30px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+    }
+
+    .admin-section h3 {
+      color: var(--primary);
+      margin-bottom: 15px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .user-list {
+      margin-top: 15px;
+    }
+
+    .user-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .user-item:last-child {
+      border-bottom: none;
+    }
+
+    .user-details {
+      flex: 1;
+    }
+
+    .user-name {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .user-info-text {
+      display: flex;
+      gap: 15px;
+      font-size: 0.9em;
+      color: #666;
+    }
+
+    .user-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    @media print {
+      .no-print {
+        display: none !important;
+      }
+      
+      body {
+        background: white;
+        padding: 0;
+      }
+      
+      .container {
+        box-shadow: none;
+        border-radius: 0;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .form-row {
+        flex-direction: column;
+        gap: 10px;
+      }
+      
+      .preview-item {
+        width: 100px;
+        height: 100px;
+      }
+      
+      .action-buttons {
+        flex-direction: column;
+      }
+      
+      .tabs {
+        flex-direction: column;
+      }
+      
+      .tab {
+        margin-right: 0;
+        border-radius: 6px;
+        margin-bottom: 5px;
+      }
+      
+      .export-buttons {
+        flex-direction: column;
+      }
+      
+      .personnel-details {
+        grid-template-columns: 1fr;
+      }
+      
+      .material-item {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .material-actions {
+        margin-top: 10px;
+        width: 100%;
+        justify-content: flex-end;
+      }
+      
+      .site-details {
+        grid-template-columns: 1fr;
+      }
+      
+      .pending-user-item {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .user-actions {
+        margin-top: 10px;
+        width: 100%;
+        justify-content: flex-end;
+      }
+      
+      .user-item {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .user-actions {
+        margin-top: 10px;
+        width: 100%;
+        justify-content: flex-end;
+      }
+    }
+  </style>
+  <!-- Excel export library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <!-- PDF export library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <!-- Login/Register Screen -->
+  <div id="authScreen" class="login-container">
+    <h2 style="text-align: center; margin-bottom: 30px;">Construction Site Management System</h2>
+    
+    <div class="auth-tabs">
+      <div class="auth-tab active" id="loginTab" onclick="switchAuthTab('login')">Sign In</div>
+      <div class="auth-tab" id="registerTab" onclick="switchAuthTab('register')">Register</div>
+    </div>
+    
+    <!-- Login Form -->
+    <div id="loginForm">
+      <div class="form-group">
+        <label>Username</label>
+        <input type="text" id="username" placeholder="Enter your username">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="password" placeholder="Enter your password">
+      </div>
+      <div class="form-group">
+        <label>Construction Site</label>
+        <input type="text" id="loginSite" placeholder="Enter construction site name">
+      </div>
+      <button class="btn btn-success" style="width: 100%; margin-top: 20px;" onclick="login()">Sign In</button>
+    </div>
+    
+    <!-- Registration Form -->
+    <div id="registerForm" style="display: none;">
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" id="regName" placeholder="Enter your full name">
+      </div>
+      <div class="form-group">
+        <label>Username</label>
+        <input type="text" id="regUsername" placeholder="Choose a username">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="regPassword" placeholder="Choose a password">
+      </div>
+      <div class="form-group">
+        <label>Confirm Password</label>
+        <input type="password" id="regConfirmPassword" placeholder="Confirm your password">
+      </div>
+      <div class="form-group">
+        <label>Role</label>
+        <select id="regRole">
+          <option value="labor">Labor</option>
+          <option value="foreman">Foreman</option>
+          <option value="engineer">Engineer</option>
+          <option value="manager">Project Manager</option>
+          <option value="storekeeper">Store Keeper</option>
+          <option value="mainstorekeeper">Main Store Keeper</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Contact Number</label>
+        <input type="text" id="regContact" placeholder="Enter your contact number">
+      </div>
+      <div class="form-group">
+        <label>Construction Site</label>
+        <input type="text" id="regSite" placeholder="Enter construction site name">
+        <small>Enter the construction site you are working at</small>
+      </div>
+      <button class="btn btn-success" style="width: 100%; margin-top: 20px;" onclick="register()">Register</button>
+    </div>
+  </div>
+
+  <!-- Main Application (hidden until login) -->
+  <div id="mainApp" class="container" style="display: none;">
+    <header>
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <h1>Construction Site Management System</h1>
+          <p>Labor, Equipment & Material Tracking System</p>
+          <p id="currentSiteDisplay" style="font-size: 0.9em; margin-top: 5px;">Site: <span id="siteNameDisplay">Not Set</span></p>
+        </div>
+        <div class="user-info">
+          <div class="user-avatar" id="userAvatar">U</div>
+          <div>
+            <div id="userDisplayName">User</div>
+            <div style="font-size: 0.8em;" id="userRoleDisplay">Role</div>
+          </div>
+          <button class="btn btn-danger" onclick="logout()">Sign Out</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="tabs no-print">
+      <div class="tab" onclick="switchTab('personnel')">Personnel</div>
+      <div class="tab active" onclick="switchTab('dailyReport')">Daily Report</div>
+      <div class="tab" onclick="switchTab('materialsStatus')">Materials Status</div>
+      <div class="tab" onclick="switchTab('deliveryNotes')">Delivery Notes</div>
+      <div class="tab" onclick="switchTab('vehicleArrangement')">Vehicle Arrangement</div>
+      <div class="tab" onclick="switchTab('communication')">Communication</div>
+      <div class="tab" onclick="switchTab('complaints')">Complaints</div>
+      <div class="tab" onclick="switchTab('safetyIncidents')">Safety Incidents</div>
+      <div class="tab" onclick="switchTab('damagedMaterials')">Damaged Materials</div>
+      <div class="tab" onclick="switchTab('savedReports')">Saved Reports</div>
+      <div class="tab" id="adminTab" style="display: none;" onclick="switchTab('adminPanel')">Admin Panel</div>
+    </div>
+
+    <!-- Admin Panel Tab (only visible to admin) -->
+    <div id="adminPanel" class="tab-content">
+      <h2>Administration Panel</h2>
+      
+      <div class="admin-section">
+        <h3>User Management</h3>
+        <div class="user-list" id="userManagementList">
+          <!-- Users will be dynamically added here -->
+        </div>
+      </div>
+      
+      <div class="admin-section">
+        <h3>Pending User Approvals</h3>
+        <div id="pendingApprovals" class="pending-users">
+          <!-- Pending users will be displayed here -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Personnel Tab -->
+    <div id="personnel" class="tab-content">
+      <h2>Personnel Management</h2>
+      
+      <div class="form-section">
+        <h3>Personnel Status</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Filter by Role</label>
+            <select id="personnelFilter" onchange="filterPersonnel()">
+              <option value="all">All Personnel</option>
+              <option value="foreman">Foreman</option>
+              <option value="engineer">Engineer</option>
+              <option value="manager">Project Manager</option>
+              <option value="storekeeper">Store Keeper</option>
+              <option value="mainstorekeeper">Main Store Keeper</option>
+              <option value="labor">Labor</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Filter by Status</label>
+            <select id="statusFilter" onchange="filterPersonnel()">
+              <option value="all">All Status</option>
+              <option value="present">Present</option>
+              <option value="off">Off</option>
+            </select>
+          </div>
+        </div>
+        
+        <div id="personnelList">
+          <!-- Personnel cards will be dynamically added here -->
+        </div>
+      </div>
+      
+      <div class="form-section">
+        <h3>Add New Personnel</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="newPersonnelName" placeholder="Enter full name">
+          </div>
+          <div class="form-group">
+            <label>Contact Number</label>
+            <input type="text" id="newPersonnelContact" placeholder="Enter contact number">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Role/Position</label>
+            <select id="newPersonnelRole">
+              <option value="labor">Labor</option>
+              <option value="foreman">Foreman</option>
+              <option value="engineer">Engineer</option>
+              <option value="manager">Project Manager</option>
+              <option value="storekeeper">Store Keeper</option>
+              <option value="mainstorekeeper">Main Store Keeper</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Status</label>
+            <select id="newPersonnelStatus">
+              <option value="present">Present</option>
+              <option value="off">Off</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn btn-success" onclick="addPersonnel()">Add Personnel</button>
+      </div>
+    </div>
+
+    <!-- Daily Report Tab -->
+    <div id="dailyReport" class="tab-content active">
+      <h2>Daily Site Report</h2>
+      
+      <div class="form-section">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Date</label>
+            <input type="date" id="sheetDate">
+          </div>
+          <div class="form-group">
+            <label>Project Name</label>
+            <input type="text" id="projectName" placeholder="Enter project name">
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label>Site Location</label>
+            <input type="text" id="siteLocation" placeholder="Enter site location">
+          </div>
+          <div class="form-group">
+            <label>Weather Conditions</label>
+            <select id="weatherConditions">
+              <option value="">Select weather</option>
+              <option value="sunny">Sunny</option>
+              <option value="cloudy">Cloudy</option>
+              <option value="rainy">Rainy</option>
+              <option value="windy">Windy</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Work Completed Today</label>
+          <textarea id="workCompleted" placeholder="Describe work completed today"></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label>Issues/Challenges</label>
+          <textarea id="issuesChallenges" placeholder="Describe any issues or challenges faced"></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label>Remarks</label>
+          <textarea id="remarks" placeholder="Additional remarks"></textarea>
+        </div>
+      </div>
+      
+      <div class="form-section">
+        <h3>Labor Details</h3>
+        <table id="laborTable">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Trade</th>
+              <th>Hours Worked</th>
+              <th>Task Description</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><input type="text" placeholder="Name"></td>
+              <td><input type="text" placeholder="Trade"></td>
+              <td><input type="number" placeholder="Hours"></td>
+              <td><input type="text" placeholder="Task description"></td>
+              <td><button class="btn btn-danger" onclick="removeLaborRow(this)">Remove</button></td>
+            </tr>
+          </tbody>
+        </table>
+        <button class="btn btn-success" onclick="addLaborRow()">Add Labor Row</button>
+      </div>
+      
+      <div class="form-section">
+        <h3>Equipment Usage</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Crane Details</label>
+            <table id="craneTable">
+              <thead>
+                <tr>
+                  <th>Crane Type</th>
+                  <th>Hours Used</th>
+                  <th>Operator</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><input type="text" placeholder="Crane type"></td>
+                  <td><input type="number" placeholder="Hours"></td>
+                  <td><input type="text" placeholder="Operator name"></td>
+                  <td><button class="btn btn-danger" onclick="removeCraneRow(this)">Remove</button></td>
+                </tr>
+              </tbody>
+            </table>
+            <button class="btn btn-success" onclick="addCraneRow()">Add Crane Row</button>
+          </div>
+          
+          <div class="form-group">
+            <label>Boom Loader Details</label>
+            <table id="boomLoaderTable">
+              <thead>
+                <tr>
+                  <th>Loader Type</th>
+                  <th>Hours Used</th>
+                  <th>Operator</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><input type="text" placeholder="Loader type"></td>
+                  <td><input type="number" placeholder="Hours"></td>
+                  <td><input type="text" placeholder="Operator name"></td>
+                  <td><button class="btn btn-danger" onclick="removeBoomLoaderRow(this)">Remove</button></td>
+                </tr>
+              </tbody>
+            </table>
+            <button class="btn btn-success" onclick="addBoomLoaderRow()">Add Loader Row</button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="form-section">
+        <h3>Materials Used Today</h3>
+        <table id="materialsTable">
+          <thead>
+            <tr>
+              <th>Material</th>
+              <th>Quantity</th>
+              <th>Unit</th>
+              <th>Location Used</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <select class="material-select">
+                  <option value="">Select Material</option>
+                </select>
+              </td>
+              <td><input type="number" placeholder="Quantity" class="material-quantity"></td>
+              <td><input type="text" placeholder="Unit" class="material-unit" readonly></td>
+              <td><input type="text" placeholder="Location"></td>
+              <td><button class="btn btn-danger" onclick="removeMaterialRow(this)">Remove</button></td>
+            </tr>
+          </tbody>
+        </table>
+        <button class="btn btn-success" onclick="addMaterialRow()">Add Material Row</button>
+      </div>
+      
+      <div class="form-section">
+        <h3>Site Photos & Documents</h3>
+        <div class="form-group">
+          <label>Upload Photos, PDFs, CAD files, or 360-degree images</label>
+          <input type="file" id="sitePhotos" accept="image/*,video/*,.pdf,.dwg,.dxf,.skp" multiple>
+          <div class="file-format-info">
+            Supported formats: JPG, PNG, GIF, PDF, DWG (CAD), DXF (CAD), SKP (SketchUp), and 360-degree images
+          </div>
+          <div class="preview-container" id="photoPreview"></div>
+        </div>
+        
+        <div class="form-group">
+          <label>CAD Drawing (if applicable)</label>
+          <input type="file" id="cadDrawing" accept=".dwg,.dxf,.skp">
+          <div class="file-format-info">
+            Upload CAD files for site plans and drawings
+          </div>
+        </div>
+      </div>
+      
+      <div class="form-section">
+        <h3>Approval</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Site Supervisor Signature</label>
+            <div class="signature-box" id="supervisorSignature" onclick="signDocument('supervisor')">Click to sign</div>
+          </div>
+          <div class="form-group">
+            <label>Project Manager Signature</label>
+            <div class="signature-box" id="managerSignature" onclick="signDocument('manager')">Click to sign</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Other tabs remain the same as before -->
+    <!-- Materials Status Tab -->
+    <div id="materialsStatus" class="tab-content">
+      <h2>Full Stock Material Status</h2>
+      
+      <div class="export-buttons">
+        <button class="btn btn-success" onclick="exportMaterialsToExcel()">Export to Excel</button>
+        <button class="btn btn-danger" onclick="exportMaterialsToPDF()">Export to PDF</button>
+        <button class="btn" onclick="showAddMaterialModal()">Add New Material</button>
+        <button class="btn btn-warning" onclick="showReceiveMaterialModal()">Receive Materials</button>
+      </div>
+      
+      <div class="form-section">
+        <h3>Material Stock Overview</h3>
+        <div id="materialsOverview">
+          <!-- Material categories and items will be dynamically added here -->
+        </div>
+      </div>
+      
+      <div class="form-section">
+        <h3>Material Status Summary</h3>
+        <div id="materialSummary">
+          <!-- Summary will be dynamically generated here -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Delivery Notes Tab -->
+    <div id="deliveryNotes" class="tab-content">
+      <h2>Delivery Notes</h2>
+      
+      <div class="form-section">
+        <h3>Add New Delivery Note</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Delivery Date</label>
+            <input type="date" id="deliveryDate">
+          </div>
+          <div class="form-group">
+            <label>Supplier Name</label>
+            <input type="text" id="supplierName" placeholder="Enter supplier name">
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label>Material Delivered</label>
+            <select id="deliveryMaterial">
+              <option value="">Select Material</option>
+              <!-- Options will be populated from materials list -->
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Quantity</label>
+            <input type="number" id="deliveryQuantity" placeholder="Enter quantity">
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label>Delivery Note Number</label>
+            <input type="text" id="deliveryNoteNumber" placeholder="Enter delivery note number">
+          </div>
+          <div class="form-group">
+            <label>Received By</label>
+            <input type="text" id="receivedBy" placeholder="Enter receiver name">
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Delivery Proof (Photo)</label>
+          <input type="file" id="deliveryProof" accept="image/*" multiple>
+          <div class="preview-container" id="deliveryProofPreview"></div>
+        </div>
+        
+        <button class="btn btn-success" onclick="addDeliveryNote()">Add Delivery Note</button>
+      </div>
+      
+      <div class="form-section">
+        <h3>Recent Delivery Notes</h3>
+        <table id="deliveryNotesTable">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Supplier</th>
+              <th>Material</th>
+              <th>Quantity</th>
+              <th>Note No.</th>
+              <th>Received By</th>
+              <th>Proof</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="deliveryNotesBody">
+            <!-- Delivery notes will be dynamically added here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Vehicle Arrangement Tab -->
+    <div id="vehicleArrangement" class="tab-content">
+      <h2>Vehicle Arrangement</h2>
+      
+      <div class="form-section">
+        <h3>Add Vehicle Arrangement</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Date</label>
+            <input type="date" id="vehicleDate">
+          </div>
+          <div class="form-group">
+            <label>Vehicle Type</label>
+            <select id="vehicleType">
+              <option value="">Select Vehicle Type</option>
+              <option value="truck">Truck</option>
+              <option value="crane">Crane</option>
+              <option value="excavator">Excavator</option>
+              <option value="loader">Loader</option>
+              <option value="dumper">Dumper</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label>Vehicle Number</label>
+            <input type="text" id="vehicleNumber" placeholder="Enter vehicle number">
+          </div>
+          <div class="form-group">
+            <label>Driver Name</label>
+            <input type="text" id="driverName" placeholder="Enter driver name">
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label>Purpose</label>
+            <input type="text" id="vehiclePurpose" placeholder="Enter purpose of vehicle">
+          </div>
+          <div class="form-group">
+            <label>Schedule Time</label>
+            <input type="time" id="vehicleScheduleTime">
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Additional Notes</label>
+          <textarea id="vehicleNotes" placeholder="Enter additional notes"></textarea>
+        </div>
+        
+        <button class="btn btn-success" onclick="addVehicleArrangement()">Add Vehicle Arrangement</button>
+      </div>
+      
+      <div class="form-section">
+        <h3>Today's Vehicle Arrangements</h3>
+        <div id="vehicleArrangementsList">
+          <!-- Vehicle arrangements will be dynamically added here -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Communication Tab -->
+    <div id="communication" class="tab-content">
+      <h2>Site Communication</h2>
+      
+      <div class="communication-panel">
+        <div class="chat-header">
+          Site Communication Channel
+        </div>
+        <div class="chat-messages" id="chatMessages">
+          <!-- Messages will be displayed here -->
+        </div>
+        <div class="chat-input">
+          <input type="text" id="messageInput" placeholder="Type your message here...">
+          <button class="btn btn-success" onclick="sendMessage()">Send</button>
+        </div>
+      </div>
+      
+      <div class="form-section">
+        <h3>Online Users</h3>
+        <div id="onlineUsers">
+          <!-- Online users will be displayed here -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Complaints Tab -->
+    <div id="complaints" class="tab-content">
+      <h2>Complaints Management</h2>
+      
+      <div class="form-section">
+        <h3>Add New Complaint</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Complaint Date</label>
+            <input type="date" id="complaintDate">
+          </div>
+          <div class="form-group">
+            <label>Complaint Type</label>
+            <select id="complaintType">
+              <option value="">Select Type</option>
+              <option value="safety">Safety Issue</option>
+              <option value="quality">Quality Issue</option>
+              <option value="logistics">Logistics Issue</option>
+              <option value="personnel">Personnel Issue</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Complaint Description</label>
+          <textarea id="complaintDescription" placeholder="Describe the complaint in detail"></textarea>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label>Reported By</label>
+            <input type="text" id="complaintReporter" placeholder="Enter your name">
+          </div>
+          <div class="form-group">
+            <label>Priority</label>
+            <select id="complaintPriority">
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+              <option value="urgent">Urgent</option>
+            </select>
+          </div>
+        </div>
+        
+        <button class="btn btn-success" onclick="addComplaint()">Submit Complaint</button>
+      </div>
+      
+      <div class="form-section">
+        <h3>Recent Complaints</h3>
+        <div id="complaintsList">
+          <!-- Complaints will be dynamically added here -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Safety Incidents Tab -->
+    <div id="safetyIncidents" class="tab-content">
+      <h2>Safety Incidents Reporting</h2>
+      
+      <div class="form-section">
+        <h3>Report Safety Incident</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Incident Date & Time</label>
+            <input type="datetime-local" id="incidentDateTime">
+          </div>
+          <div class="form-group">
+            <label>Incident Type</label>
+            <select id="incidentType">
+              <option value="">Select Type</option>
+              <option value="injury">Injury</option>
+              <option value="nearmiss">Near Miss</option>
+              <option value="propertydamage">Property Damage</option>
+              <option value="equipmentfailure">Equipment Failure</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Incident Description</label>
+          <textarea id="incidentDescription" placeholder="Describe the incident in detail"></textarea>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label>Location</label>
+            <input type="text" id="incidentLocation" placeholder="Enter incident location">
+          </div>
+          <div class="form-group">
+            <label>Reported By</label>
+            <input type="text" id="incidentReporter" placeholder="Enter your name">
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Incident Proof (Photos)</label>
+          <input type="file" id="incidentProof" accept="image/*" multiple>
+          <div class="preview-container" id="incidentProofPreview"></div>
+        </div>
+        
+        <button class="btn btn-success" onclick="addSafetyIncident()">Report Incident</button>
+      </div>
+      
+      <div class="form-section">
+        <h3>Recent Safety Incidents</h3>
+        <div id="safetyIncidentsList">
+          <!-- Safety incidents will be dynamically added here -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Damaged Materials Tab -->
+    <div id="damagedMaterials" class="tab-content">
+      <h2>Damaged Materials Reporting</h2>
+      
+      <div class="form-section">
+        <h3>Report Damaged Material</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Date of Discovery</label>
+            <input type="date" id="damageDate">
+          </div>
+          <div class="form-group">
+            <label>Material</label>
+            <select id="damagedMaterial">
+              <option value="">Select Material</option>
+              <!-- Options will be populated from materials list -->
+            </select>
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label>Damage Type</label>
+            <select id="damageType">
+              <option value="">Select Type</option>
+              <option value="broken">Broken</option>
+              <option value="cracked">Cracked</option>
+              <option value="expired">Expired</option>
+              <option value="waterdamaged">Water Damaged</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Quantity Damaged</label>
+            <input type="number" id="damageQuantity" placeholder="Enter quantity">
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Damage Description</label>
+          <textarea id="damageDescription" placeholder="Describe the damage in detail"></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label>Damage Proof (Photos)</label>
+          <input type="file" id="damageProof" accept="image/*" multiple>
+          <div class="preview-container" id="damageProofPreview"></div>
+        </div>
+        
+        <button class="btn btn-success" onclick="addDamagedMaterial()">Report Damaged Material</button>
+      </div>
+      
+      <div class="form-section">
+        <h3>Recent Damaged Materials</h3>
+        <table id="damagedMaterialsTable">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Material</th>
+              <th>Damage Type</th>
+              <th>Quantity</th>
+              <th>Description</th>
+              <th>Proof</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="damagedMaterialsBody">
+            <!-- Damaged materials will be dynamically added here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Saved Reports Tab -->
+    <div id="savedReports" class="tab-content">
+      <h2>Saved Reports</h2>
+      
+      <div class="form-section">
+        <div class="export-buttons">
+          <button class="btn btn-success" onclick="saveDailyReport()">Save Current Daily Report</button>
+          <button class="btn btn-warning" onclick="printDailyReport()">Print Daily Report</button>
+        </div>
+        
+        <div class="saved-reports" id="savedReportsList">
+          <!-- Saved reports will be displayed here -->
+        </div>
+      </div>
+    </div>
+
+    <div class="action-buttons no-print">
+      <button class="btn btn-success" onclick="saveDailyReport()">Save Report</button>
+      <button class="btn btn-warning" onclick="printDailyReport()">Print Report</button>
+      <button class="btn btn-danger" onclick="clearForm()">Clear Form</button>
+    </div>
+  </div>
+
+  <!-- Modal for Adding New Material -->
+  <div id="addMaterialModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 1000;">
+    <div style="position: relative; background: white; margin: 5% auto; padding: 20px; width: 80%; max-width: 600px; border-radius: 8px;">
+      <h2>Add New Material</h2>
+      <div class="form-group">
+        <label>Material Name</label>
+        <input type="text" id="newMaterialName" placeholder="Enter material name">
+      </div>
+      <div class="form-group">
+        <label>Category</label>
+        <select id="newMaterialCategory">
+          <option value="construction">Construction</option>
+          <option value="finishing">Finishing</option>
+          <option value="electrical">Electrical</option>
+          <option value="plumbing">Plumbing</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Initial Quantity</label>
+          <input type="number" id="newMaterialQuantity" placeholder="Enter initial quantity">
+        </div>
+        <div class="form-group">
+          <label>Unit</label>
+          <input type="text" id="newMaterialUnit" placeholder="Enter unit (e.g., kg, bags)">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Minimum Stock Level</label>
+        <input type="number" id="newMaterialMinLevel" placeholder="Enter minimum stock level">
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <textarea id="newMaterialDescription" placeholder="Enter material description"></textarea>
+      </div>
+      <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+        <button class="btn btn-danger" onclick="closeAddMaterialModal()">Cancel</button>
+        <button class="btn btn-success" onclick="addNewMaterial()">Add Material</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for Receiving Materials -->
+  <div id="receiveMaterialModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 1000;">
+    <div style="position: relative; background: white; margin: 5% auto; padding: 20px; width: 80%; max-width: 600px; border-radius: 8px;">
+      <h2>Receive Materials</h2>
+      <div class="form-group">
+        <label>Select Material</label>
+        <select id="receiveMaterialSelect">
+          <option value="">Select Material</option>
+          <!-- Options will be populated from materials list -->
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Quantity Received</label>
+        <input type="number" id="receiveMaterialQuantity" placeholder="Enter quantity received">
+      </div>
+      <div class="form-group">
+        <label>Supplier</label>
+        <input type="text" id="receiveMaterialSupplier" placeholder="Enter supplier name">
+      </div>
+      <div class="form-group">
+        <label>Delivery Note Number</label>
+        <input type="text" id="receiveMaterialNote" placeholder="Enter delivery note number">
+      </div>
+      <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+        <button class="btn btn-danger" onclick="closeReceiveMaterialModal()">Cancel</button>
+        <button class="btn btn-success" onclick="receiveMaterial()">Receive Material</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Initialize variables
+    let laborRowCount = 2;
+    let craneRowCount = 1;
+    let boomLoaderRowCount = 1;
+    let materialRowCount = 1;
+    let damagedMaterialRowCount = 1;
+    let currentTool = 'pencil';
+    let isDrawing = false;
+    let lastX = 0;
+    let lastY = 0;
+    let canvas, ctx;
+    let currentUser = null;
+    let messages = [];
+    let complaints = [];
+    let incidents = [];
+    let damagedMaterials = [];
+    
+    // New variables for enhanced features
+    let materials = [];
+    let deliveries = [];
+    let vehicleSchedules = [];
+    let personnel = [];
+    
+    // Site management variables
+    const adminEmail = "mohamedabdulbasid@gmail.com";
+
+    // Set default date to today
+    document.getElementById('sheetDate').valueAsDate = new Date();
+    document.getElementById('incidentDateTime').value = new Date().toISOString().slice(0, 16);
+    document.getElementById('deliveryDate').valueAsDate = new Date();
+    document.getElementById('vehicleDate').valueAsDate = new Date();
+    document.getElementById('complaintDate').valueAsDate = new Date();
+    document.getElementById('damageDate').valueAsDate = new Date();
+
+    // Initialize when page loads
+    window.onload = function() {
+      canvas = document.getElementById('drawingCanvas');
+      if (canvas) {
+        ctx = canvas.getContext('2d');
+        ctx.lineWidth = 2;
+        ctx.lineCap = 'round';
+        ctx.strokeStyle = '#000';
+        setupCanvasEvents();
+      }
+      
+      // Load all data
+      loadSavedReports();
+      loadComplaints();
+      loadIncidents();
+      loadDamagedMaterials();
+      simulateOnlineUsers();
+      
+      // Load enhanced features data
+      loadMaterials();
+      loadDeliveries();
+      loadVehicleSchedules();
+      updateMaterialSelectOptions();
+      
+      // Load personnel data
+      loadPersonnel();
+      
+      // Update material selects in daily report
+      updateDailyReportMaterialSelects();
+      
+      // Load pending approvals
+      loadPendingApprovals();
+    };
+
+    // Authentication Functions
+    function switchAuthTab(tab) {
+      if (tab === 'login') {
+        document.getElementById('loginForm').style.display = 'block';
+        document.getElementById('registerForm').style.display = 'none';
+        document.getElementById('loginTab').classList.add('active');
+        document.getElementById('registerTab').classList.remove('active');
+      } else {
+        document.getElementById('loginForm').style.display = 'none';
+        document.getElementById('registerForm').style.display = 'block';
+        document.getElementById('loginTab').classList.remove('active');
+        document.getElementById('registerTab').classList.add('active');
+      }
+    }
+
+    function register() {
+      const name = document.getElementById('regName').value;
+      const username = document.getElementById('regUsername').value;
+      const password = document.getElementById('regPassword').value;
+      const confirmPassword = document.getElementById('regConfirmPassword').value;
+      const role = document.getElementById('regRole').value;
+      const contact = document.getElementById('regContact').value;
+      const site = document.getElementById('regSite').value;
+      
+      if (!name || !username || !password || !confirmPassword || !role || !contact || !site) {
+        alert('Please fill in all fields');
+        return;
+      }
+      
+      if (password !== confirmPassword) {
+        alert('Passwords do not match');
+        return;
+      }
+      
+      // Check if username already exists in approved users
+      const approvedUsers = JSON.parse(localStorage.getItem('siteUsers')) || [];
+      if (approvedUsers.find(user => user.username === username)) {
+        alert('Username already exists');
+        return;
+      }
+      
+      // Check if username already exists in pending approvals
+      const pendingApprovals = JSON.parse(localStorage.getItem('pendingApprovals')) || [];
+      if (pendingApprovals.find(user => user.username === username)) {
+        alert('Username already exists in pending approvals');
+        return;
+      }
+      
+      // Create new user with pending status
+      const newUser = {
+        id: pendingApprovals.length > 0 ? Math.max(...pendingApprovals.map(u => u.id)) + 1 : 1,
+        name: name,
+        username: username,
+        password: password,
+        role: role,
+        contact: contact,
+        site: site,
+        status: 'pending',
+        registeredDate: new Date().toISOString()
+      };
+      
+      pendingApprovals.push(newUser);
+      localStorage.setItem('pendingApprovals', JSON.stringify(pendingApprovals));
+      
+      alert('Registration submitted successfully! Your account is pending approval from the administrator.');
+      switchAuthTab('login');
+      
+      // Clear form
+      document.getElementById('regName').value = '';
+      document.getElementById('regUsername').value = '';
+      document.getElementById('regPassword').value = '';
+      document.getElementById('regConfirmPassword').value = '';
+      document.getElementById('regContact').value = '';
+      document.getElementById('regSite').value = '';
+    }
+
+    function login() {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const site = document.getElementById('loginSite').value;
+      
+      if (!username || !password || !site) {
+        alert('Please enter username, password, and construction site');
+        return;
+      }
+      
+      // Check credentials in approved users
+      const approvedUsers = JSON.parse(localStorage.getItem('siteUsers')) || [];
+      const user = approvedUsers.find(u => u.username === username && u.password === password && u.site === site);
+      
+      if (!user) {
+        alert('Invalid username, password, or construction site');
+        return;
+      }
+      
+      currentUser = user;
+      
+      // Hide login screen, show main app
+      document.getElementById('authScreen').style.display = 'none';
+      document.getElementById('mainApp').style.display = 'block';
+      
+      // Update user info in header
+      document.getElementById('userDisplayName').textContent = currentUser.name;
+      document.getElementById('userRoleDisplay').textContent = currentUser.role.charAt(0).toUpperCase() + currentUser.role.slice(1);
+      document.getElementById('userAvatar').textContent = currentUser.name.charAt(0).toUpperCase();
+      
+      // Update site display
+      document.getElementById('siteNameDisplay').textContent = currentUser.site;
+      
+      // Show admin tab if user is admin
+      if (currentUser.username === adminEmail) {
+        document.getElementById('adminTab').style.display = 'block';
+        loadUserManagement();
+      }
+      
+      // Load messages for this user
+      loadMessages();
+    }
+
+    function logout() {
+      currentUser = null;
+      document.getElementById('authScreen').style.display = 'block';
+      document.getElementById('mainApp').style.display = 'none';
+      document.getElementById('username').value = '';
+      document.getElementById('password').value = '';
+      document.getElementById('loginSite').value = '';
+      document.getElementById('adminTab').style.display = 'none';
+      switchAuthTab('login');
+    }
+
+    // Admin Panel Functions
+    function loadPendingApprovals() {
+      const pendingApprovals = JSON.parse(localStorage.getItem('pendingApprovals')) || [];
+      displayPendingApprovals(pendingApprovals);
+    }
+
+    function displayPendingApprovals(pendingApprovals) {
+      const approvalsContainer = document.getElementById('pendingApprovals');
+      if (!approvalsContainer) return;
+      
+      approvalsContainer.innerHTML = '';
+      
+      if (pendingApprovals.length === 0) {
+        approvalsContainer.innerHTML = '<p>No pending user approvals.</p>';
+        return;
+      }
+      
+      pendingApprovals.forEach(user => {
+        const userItem = document.createElement('div');
+        userItem.className = 'pending-user-item';
+        userItem.innerHTML = `
+          <div>
+            <h4>${user.name}</h4>
+            <p><strong>Username:</strong> ${user.username} | <strong>Role:</strong> ${user.role}</p>
+            <p><strong>Contact:</strong> ${user.contact} | <strong>Site:</strong> ${user.site}</p>
+            <p><strong>Registered:</strong> ${new Date(user.registeredDate).toLocaleDateString()}</p>
+          </div>
+          <div class="user-actions">
+            <button class="btn btn-success" onclick="approveUser(${user.id})">Approve</button>
+            <button class="btn btn-danger" onclick="rejectUser(${user.id})">Reject</button>
+          </div>
+        `;
+        approvalsContainer.appendChild(userItem);
+      });
+    }
+
+    function approveUser(userId) {
+      const pendingApprovals = JSON.parse(localStorage.getItem('pendingApprovals')) || [];
+      const userIndex = pendingApprovals.findIndex(u => u.id === userId);
+      if (userIndex === -1) return;
+      
+      const user = pendingApprovals[userIndex];
+      
+      // Add to approved users
+      const approvedUsers = JSON.parse(localStorage.getItem('siteUsers')) || [];
+      user.status = 'approved';
+      approvedUsers.push(user);
+      localStorage.setItem('siteUsers', JSON.stringify(approvedUsers));
+      
+      // Remove from pending approvals
+      pendingApprovals.splice(userIndex, 1);
+      localStorage.setItem('pendingApprovals', JSON.stringify(pendingApprovals));
+      displayPendingApprovals(pendingApprovals);
+      
+      alert(`User ${user.name} has been approved.`);
+    }
+
+    function rejectUser(userId) {
+      if (confirm('Are you sure you want to reject this user registration?')) {
+        const pendingApprovals = JSON.parse(localStorage.getItem('pendingApprovals')) || [];
+        const updatedApprovals = pendingApprovals.filter(u => u.id !== userId);
+        localStorage.setItem('pendingApprovals', JSON.stringify(updatedApprovals));
+        displayPendingApprovals(updatedApprovals);
+      }
+    }
+
+    function loadUserManagement() {
+      const approvedUsers = JSON.parse(localStorage.getItem('siteUsers')) || [];
+      displayUserManagement(approvedUsers);
+    }
+
+    function displayUserManagement(users) {
+      const userList = document.getElementById('userManagementList');
+      if (!userList) return;
+      
+      userList.innerHTML = '';
+      
+      if (users.length === 0) {
+        userList.innerHTML = '<p>No users found.</p>';
+        return;
+      }
+      
+      users.forEach(user => {
+        const userItem = document.createElement('div');
+        userItem.className = 'user-item';
+        userItem.innerHTML = `
+          <div class="user-details">
+            <div class="user-name">${user.name}</div>
+            <div class="user-info-text">
+              <span><strong>Username:</strong> ${user.username}</span>
+              <span><strong>Role:</strong> ${user.role}</span>
+              <span><strong>Site:</strong> ${user.site}</span>
+              <span><strong>Status:</strong> ${user.status}</span>
+            </div>
+          </div>
+          <div class="user-actions">
+            <button class="btn btn-warning" onclick="editUser(${user.id})">Edit</button>
+            <button class="btn btn-danger" onclick="deleteUser(${user.id})">Delete</button>
+          </div>
+        `;
+        userList.appendChild(userItem);
+      });
+    }
+
+    function editUser(userId) {
+      const approvedUsers = JSON.parse(localStorage.getItem('siteUsers')) || [];
+      const user = approvedUsers.find(u => u.id === userId);
+      if (!user) return;
+      
+      const newRole = prompt('Enter new role for ' + user.name + ':', user.role);
+      if (newRole) {
+        user.role = newRole;
+        localStorage.setItem('siteUsers', JSON.stringify(approvedUsers));
+        loadUserManagement();
+        alert('User role updated successfully!');
+      }
+    }
+
+    function deleteUser(userId) {
+      if (confirm('Are you sure you want to delete this user?')) {
+        const approvedUsers = JSON.parse(localStorage.getItem('siteUsers')) || [];
+        const updatedUsers = approvedUsers.filter(u => u.id !== userId);
+        localStorage.setItem('siteUsers', JSON.stringify(updatedUsers));
+        loadUserManagement();
+        alert('User deleted successfully!');
+      }
+    }
+
+    // Personnel Management Functions
+    function loadPersonnel() {
+      const savedPersonnel = localStorage.getItem('sitePersonnel');
+      if (savedPersonnel) {
+        personnel = JSON.parse(savedPersonnel);
+      } else {
+        // Initialize with some sample personnel
+        personnel = [
+          { id: 1, name: 'John Foreman', contact: '123-456-7890', role: 'foreman', status: 'present', dateAdded: new Date().toISOString() },
+          { id: 2, name: 'Sarah Engineer', contact: '123-456-7891', role: 'engineer', status: 'present', dateAdded: new Date().toISOString() },
+          { id: 3, name: 'Mike Manager', contact: '123-456-7892', role: 'manager', status: 'present', dateAdded: new Date().toISOString() },
+          { id: 4, name: 'David Storekeeper', contact: '123-456-7893', role: 'storekeeper', status: 'present', dateAdded: new Date().toISOString() },
+          { id: 5, name: 'Lisa Main Storekeeper', contact: '123-456-7894', role: 'mainstorekeeper', status: 'present', dateAdded: new Date().toISOString() },
+          { id: 6, name: 'Robert Labor', contact: '123-456-7895', role: 'labor', status: 'present', dateAdded: new Date().toISOString() }
+        ];
+        savePersonnel();
+      }
+      displayPersonnel();
+    }
+
+    function savePersonnel() {
+      localStorage.setItem('sitePersonnel', JSON.stringify(personnel));
+    }
+
+    function displayPersonnel() {
+      const personnelList = document.getElementById('personnelList');
+      personnelList.innerHTML = '';
+      
+      const roleFilter = document.getElementById('personnelFilter').value;
+      const statusFilter = document.getElementById('statusFilter').value;
+      
+      const filteredPersonnel = personnel.filter(p => {
+        return (roleFilter === 'all' || p.role === roleFilter) && 
+               (statusFilter === 'all' || p.status === statusFilter);
+      });
+      
+      if (filteredPersonnel.length === 0) {
+        personnelList.innerHTML = '<p>No personnel found matching the filters.</p>';
+        return;
+      }
+      
+      filteredPersonnel.forEach(person => {
+        const card = document.createElement('div');
+        card.className = 'personnel-card';
+        card.innerHTML = `
+          <div class="personnel-header">
+            <h3>${person.name}</h3>
+            <div class="personnel-status ${person.status === 'present' ? 'status-present' : 'status-off'}">
+              ${person.status === 'present' ? 'Present' : 'Off'}
+            </div>
+          </div>
+          <div class="personnel-details">
+            <div><strong>Role:</strong> ${person.role.charAt(0).toUpperCase() + person.role.slice(1)}</div>
+            <div><strong>Contact:</strong> ${person.contact}</div>
+            <div><strong>Date Added:</strong> ${new Date(person.dateAdded).toLocaleDateString()}</div>
+            <div>
+              <button class="btn btn-warning" onclick="togglePersonnelStatus(${person.id})">Mark ${person.status === 'present' ? 'Off' : 'Present'}</button>
+              <button class="btn btn-danger" onclick="deletePersonnel(${person.id})">Delete</button>
+            </div>
+          </div>
+        `;
+        personnelList.appendChild(card);
+      });
+    }
+
+    function filterPersonnel() {
+      displayPersonnel();
+    }
+
+    function addPersonnel() {
+      const name = document.getElementById('newPersonnelName').value;
+      const contact = document.getElementById('newPersonnelContact').value;
+      const role = document.getElementById('newPersonnelRole').value;
+      const status = document.getElementById('newPersonnelStatus').value;
+      
+      if (!name || !contact) {
+        alert('Please fill in all required fields');
+        return;
+      }
+      
+      const newPerson = {
+        id: personnel.length > 0 ? Math.max(...personnel.map(p => p.id)) + 1 : 1,
+        name: name,
+        contact: contact,
+        role: role,
+        status: status,
+        dateAdded: new Date().toISOString()
+      };
+      
+      personnel.push(newPerson);
+      savePersonnel();
+      displayPersonnel();
+      
+      // Clear form
+      document.getElementById('newPersonnelName').value = '';
+      document.getElementById('newPersonnelContact').value = '';
+      
+      alert('Personnel added successfully!');
+    }
+
+    function togglePersonnelStatus(id) {
+      const person = personnel.find(p => p.id === id);
+      if (person) {
+        person.status = person.status === 'present' ? 'off' : 'present';
+        savePersonnel();
+        displayPersonnel();
+      }
+    }
+
+    function deletePersonnel(id) {
+      if (confirm('Are you sure you want to delete this personnel record?')) {
+        personnel = personnel.filter(p => p.id !== id);
+        savePersonnel();
+        displayPersonnel();
+      }
+    }
+
+    // Tab switching function
+    function switchTab(tabName) {
+      // Hide all tab contents
+      document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      
+      // Show selected tab content
+      document.getElementById(tabName).classList.add('active');
+      
+      // Update tab buttons
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      
+      event.target.classList.add('active');
+    }
+
+    // Materials Management
+    function loadMaterials() {
+      const savedMaterials = localStorage.getItem('siteMaterials');
+      if (savedMaterials) {
+        materials = JSON.parse(savedMaterials);
+      } else {
+        // Initialize with some sample materials
+        materials = [
+          { 
+            id: 1, 
+            name: 'Cement', 
+            category: 'construction', 
+            initialQuantity: 1000, 
+            currentQuantity: 850, 
+            unit: 'bags', 
+            minLevel: 100,
+            description: 'Portland cement for concrete mixing',
+            received: [
+              { date: '2023-10-15', quantity: 500, supplier: 'ABC Suppliers', note: 'DN-001' },
+              { date: '2023-11-05', quantity: 500, supplier: 'XYZ Cement', note: 'DN-012' }
+            ],
+            used: [
+              { date: '2023-10-20', quantity: 150, project: 'Foundation' },
+              { date: '2023-11-10', quantity: 100, project: 'Columns' }
+            ]
+          },
+          { 
+            id: 2, 
+            name: 'Steel Bars', 
+            category: 'construction', 
+            initialQuantity: 5000, 
+            currentQuantity: 4200, 
+            unit: 'pieces', 
+            minLevel: 500,
+            description: 'Reinforcement steel bars 12mm',
+            received: [
+              { date: '2023-10-10', quantity: 3000, supplier: 'Steel Corp', note: 'DN-005' },
+              { date: '2023-11-01', quantity: 2000, supplier: 'Metal Works', note: 'DN-010' }
+            ],
+            used: [
+              { date: '2023-10-25', quantity: 500, project: 'Foundation' },
+              { date: '2023-11-15', quantity: 300, project: 'Beams' }
+            ]
+          },
+          { 
+            id: 3, 
+            name: 'Paint', 
+            category: 'finishing', 
+            initialQuantity: 200, 
+            currentQuantity: 180, 
+            unit: 'liters', 
+            minLevel: 30,
+            description: 'Interior wall paint - white',
+            received: [
+              { date: '2023-11-20', quantity: 200, supplier: 'Paint Masters', note: 'DN-015' }
+            ],
+            used: [
+              { date: '2023-11-25', quantity: 20, project: 'Office Area' }
+            ]
+          }
+        ];
+        saveMaterials();
+      }
+      updateMaterialsStatus();
+    }
+
+    function saveMaterials() {
+      localStorage.setItem('siteMaterials', JSON.stringify(materials));
+    }
+
+    function updateMaterialsStatus() {
+      const container = document.getElementById('materialsOverview');
+      if (!container) return;
+      
+      container.innerHTML = '';
+      
+      // Group materials by category
+      const categories = {};
+      materials.forEach(material => {
+        if (!categories[material.category]) {
+          categories[material.category] = [];
+        }
+        categories[material.category].push(material);
+      });
+      
+      // Display materials by category
+      Object.keys(categories).forEach(category => {
+        const categoryDiv = document.createElement('div');
+        categoryDiv.className = 'material-category';
+        
+        const categoryTitle = document.createElement('h3');
+        categoryTitle.textContent = category.charAt(0).toUpperCase() + category.slice(1) + ' Materials';
+        categoryDiv.appendChild(categoryTitle);
+        
+        categories[category].forEach(material => {
+          const materialItem = document.createElement('div');
+          materialItem.className = 'material-item';
+          
+          const usagePercentage = ((material.initialQuantity - material.currentQuantity) / material.initialQuantity) * 100;
+          const stockPercentage = (material.currentQuantity / material.initialQuantity) * 100;
+          
+          let stockClass = 'stock-high';
+          if (stockPercentage < 30) {
+            stockClass = 'stock-low';
+          } else if (stockPercentage < 60) {
+            stockClass = 'stock-medium';
+          }
+          
+          materialItem.innerHTML = `
+            <div class="material-info">
+              <div class="material-name">${material.name}</div>
+              <div class="material-details">
+                <span>Initial: ${material.initialQuantity} ${material.unit}</span>
+                <span>Current: ${material.currentQuantity} ${material.unit}</span>
+                <span>Min Level: ${material.minLevel} ${material.unit}</span>
+              </div>
+              <div class="stock-level">
+                <div class="stock-fill ${stockClass}" style="width: ${stockPercentage}%"></div>
+              </div>
+              <div class="stock-info">
+                <span>Used: ${material.initialQuantity - material.currentQuantity} ${material.unit} (${usagePercentage.toFixed(1)}%)</span>
+                <span>Remaining: ${material.currentQuantity} ${material.unit}</span>
+              </div>
+            </div>
+            <div class="material-actions">
+              <button class="btn btn-warning" onclick="showMaterialHistory(${material.id})">History</button>
+              <button class="btn btn-danger" onclick="deleteMaterial(${material.id})">Delete</button>
+            </div>
+          `;
+          
+          categoryDiv.appendChild(materialItem);
+        });
+        
+        container.appendChild(categoryDiv);
+      });
+      
+      // Update summary
+      const summary = document.getElementById('materialSummary');
+      if (summary) {
+        const totalMaterials = materials.length;
+        const lowStockMaterials = materials.filter(m => m.currentQuantity < m.minLevel).length;
+        const outOfStockMaterials = materials.filter(m => m.currentQuantity <= 0).length;
+        
+        summary.innerHTML = `
+          <div class="material-status ${lowStockMaterials > 0 ? 'material-warning' : 'material-status'}">
+            <strong>Summary:</strong> ${totalMaterials} materials tracked | 
+            ${lowStockMaterials} low stock | ${outOfStockMaterials} out of stock
+          </div>
+        `;
+      }
+    }
+
+    function showAddMaterialModal() {
+      document.getElementById('addMaterialModal').style.display = 'block';
+    }
+
+    function closeAddMaterialModal() {
+      document.getElementById('addMaterialModal').style.display = 'none';
+    }
+
+    function addNewMaterial() {
+      const name = document.getElementById('newMaterialName').value;
+      const category = document.getElementById('newMaterialCategory').value;
+      const quantity = parseInt(document.getElementById('newMaterialQuantity').value);
+      const unit = document.getElementById('newMaterialUnit').value;
+      const minLevel = parseInt(document.getElementById('newMaterialMinLevel').value);
+      const description = document.getElementById('newMaterialDescription').value;
+      
+      if (!name || !category || isNaN(quantity) || !unit || isNaN(minLevel)) {
+        alert('Please fill in all required fields');
+        return;
+      }
+      
+      const newMaterial = {
+        id: materials.length > 0 ? Math.max(...materials.map(m => m.id)) + 1 : 1,
+        name: name,
+        category: category,
+        initialQuantity: quantity,
+        currentQuantity: quantity,
+        unit: unit,
+        minLevel: minLevel,
+        description: description,
+        received: [
+          { date: new Date().toISOString().split('T')[0], quantity: quantity, supplier: 'Initial Stock', note: 'Initial' }
+        ],
+        used: []
+      };
+      
+      materials.push(newMaterial);
+      saveMaterials();
+      updateMaterialsStatus();
+      updateMaterialSelectOptions();
+      updateDailyReportMaterialSelects();
+      
+      // Clear form and close modal
+      document.getElementById('newMaterialName').value = '';
+      document.getElementById('newMaterialQuantity').value = '';
+      document.getElementById('newMaterialUnit').value = '';
+      document.getElementById('newMaterialMinLevel').value = '';
+      document.getElementById('newMaterialDescription').value = '';
+      closeAddMaterialModal();
+      
+      alert('Material added successfully!');
+    }
+
+    function showReceiveMaterialModal() {
+      const select = document.getElementById('receiveMaterialSelect');
+      select.innerHTML = '<option value="">Select Material</option>';
+      
+      materials.forEach(material => {
+        const option = document.createElement('option');
+        option.value = material.id;
+        option.textContent = `${material.name} (${material.unit})`;
+        select.appendChild(option);
+      });
+      
+      document.getElementById('receiveMaterialModal').style.display = 'block';
+    }
+
+    function closeReceiveMaterialModal() {
+      document.getElementById('receiveMaterialModal').style.display = 'none';
+    }
+
+    function receiveMaterial() {
+      const materialId = parseInt(document.getElementById('receiveMaterialSelect').value);
+      const quantity = parseInt(document.getElementById('receiveMaterialQuantity').value);
+      const supplier = document.getElementById('receiveMaterialSupplier').value;
+      const note = document.getElementById('receiveMaterialNote').value;
+      
+      if (!materialId || isNaN(quantity) || !supplier) {
+        alert('Please fill in all required fields');
+        return;
+      }
+      
+      const material = materials.find(m => m.id === materialId);
+      if (!material) {
+        alert('Invalid material selected');
+        return;
+      }
+      
+      // Update material quantities
+      material.initialQuantity += quantity;
+      material.currentQuantity += quantity;
+      
+      // Add to received history
+      material.received.push({
+        date: new Date().toISOString().split('T')[0],
+        quantity: quantity,
+        supplier: supplier,
+        note: note
+      });
+      
+      saveMaterials();
+      updateMaterialsStatus();
+      closeReceiveMaterialModal();
+      
+      // Clear form
+      document.getElementById('receiveMaterialSelect').value = '';
+      document.getElementById('receiveMaterialQuantity').value = '';
+      document.getElementById('receiveMaterialSupplier').value = '';
+      document.getElementById('receiveMaterialNote').value = '';
+      
+      alert('Material received successfully!');
+    }
+
+    function useMaterial(materialId, quantity, project) {
+      const material = materials.find(m => m.id === materialId);
+      if (!material) return false;
+      
+      if (material.currentQuantity < quantity) {
+        alert(`Not enough ${material.name} in stock. Available: ${material.currentQuantity} ${material.unit}`);
+        return false;
+      }
+      
+      // Update material quantity
+      material.currentQuantity -= quantity;
+      
+      // Add to used history
+      material.used.push({
+        date: new Date().toISOString().split('T')[0],
+        quantity: quantity,
+        project: project || 'Daily Usage'
+      });
+      
+      saveMaterials();
+      updateMaterialsStatus();
+      return true;
+    }
+
+    function showMaterialHistory(id) {
+      const material = materials.find(m => m.id === id);
+      if (!material) return;
+      
+      let historyHTML = `
+        <h3>${material.name} - Usage History</h3>
+        <p><strong>Description:</strong> ${material.description}</p>
+        <p><strong>Current Stock:</strong> ${material.currentQuantity} ${material.unit}</p>
+        
+        <h4>Received History</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Quantity</th>
+              <th>Supplier</th>
+              <th>Note</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+      
+      material.received.forEach(receive => {
+        historyHTML += `
+          <tr>
+            <td>${receive.date}</td>
+            <td>${receive.quantity} ${material.unit}</td>
+            <td>${receive.supplier}</td>
+            <td>${receive.note}</td>
+          </tr>
+        `;
+      });
+      
+      historyHTML += `
+          </tbody>
+        </table>
+        
+        <h4>Usage History</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Quantity</th>
+              <th>Project</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+      
+      material.used.forEach(usage => {
+        historyHTML += `
+          <tr>
+            <td>${usage.date}</td>
+            <td>${usage.quantity} ${material.unit}</td>
+            <td>${usage.project}</td>
+          </tr>
+        `;
+      });
+      
+      historyHTML += `
+          </tbody>
+        </table>
+      `;
+      
+      alert(historyHTML);
+    }
+
+    function deleteMaterial(id) {
+      if (confirm('Are you sure you want to delete this material? This action cannot be undone.')) {
+        materials = materials.filter(m => m.id !== id);
+        saveMaterials();
+        updateMaterialsStatus();
+        updateMaterialSelectOptions();
+        updateDailyReportMaterialSelects();
+      }
+    }
+
+    function updateMaterialSelectOptions() {
+      const deliverySelect = document.getElementById('deliveryMaterial');
+      const damagedSelect = document.getElementById('damagedMaterial');
+      const receiveSelect = document.getElementById('receiveMaterialSelect');
+      
+      if (deliverySelect) {
+        deliverySelect.innerHTML = '<option value="">Select Material</option>';
+        materials.forEach(material => {
+          const option = document.createElement('option');
+          option.value = material.id;
+          option.textContent = `${material.name} (${material.unit})`;
+          deliverySelect.appendChild(option);
+        });
+      }
+      
+      if (damagedSelect) {
+        damagedSelect.innerHTML = '<option value="">Select Material</option>';
+        materials.forEach(material => {
+          const option = document.createElement('option');
+          option.value = material.id;
+          option.textContent = `${material.name} (${material.unit})`;
+          damagedSelect.appendChild(option);
+        });
+      }
+      
+      if (receiveSelect) {
+        receiveSelect.innerHTML = '<option value="">Select Material</option>';
+        materials.forEach(material => {
+          const option = document.createElement('option');
+          option.value = material.id;
+          option.textContent = `${material.name} (${material.unit})`;
+          receiveSelect.appendChild(option);
+        });
+      }
+    }
+
+    function updateDailyReportMaterialSelects() {
+      const selects = document.querySelectorAll('.material-select');
+      selects.forEach(select => {
+        select.innerHTML = '<option value="">Select Material</option>';
+        materials.forEach(material => {
+          const option = document.createElement('option');
+          option.value = material.id;
+          option.textContent = `${material.name} (${material.unit})`;
+          select.appendChild(option);
+        });
+        
+        // Add change event to update unit when material is selected
+        select.onchange = function() {
+          const materialId = parseInt(this.value);
+          const material = materials.find(m => m.id === materialId);
+          const row = this.closest('tr');
+          const unitField = row.querySelector('.material-unit');
+          
+          if (material) {
+            unitField.value = material.unit;
+          } else {
+            unitField.value = '';
+          }
+        };
+      });
+    }
+
+    // Delivery Notes Management
+    function loadDeliveries() {
+      const savedDeliveries = localStorage.getItem('siteDeliveries');
+      if (savedDeliveries) {
+        deliveries = JSON.parse(savedDeliveries);
+      } else {
+        deliveries = [];
+      }
+      displayDeliveries();
+    }
+
+    function saveDeliveries() {
+      localStorage.setItem('siteDeliveries', JSON.stringify(deliveries));
+    }
+
+    function addDeliveryNote() {
+      const date = document.getElementById('deliveryDate').value;
+      const supplier = document.getElementById('supplierName').value;
+      const materialId = document.getElementById('deliveryMaterial').value;
+      const quantity = document.getElementById('deliveryQuantity').value;
+      const noteNumber = document.getElementById('deliveryNoteNumber').value;
+      const receivedBy = document.getElementById('receivedBy').value;
+      
+      if (!date || !supplier || !materialId || !quantity || !noteNumber || !receivedBy) {
+        alert('Please fill in all fields');
+        return;
+      }
+      
+      const material = materials.find(m => m.id == materialId);
+      if (!material) {
+        alert('Invalid material selected');
+        return;
+      }
+      
+      // Handle proof images
+      const proofInput = document.getElementById('deliveryProof');
+      const proofFiles = proofInput.files;
+      const proofUrls = [];
+      
+      if (proofFiles.length > 0) {
+        for (let i = 0; i < proofFiles.length; i++) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            proofUrls.push(e.target.result);
+            if (proofUrls.length === proofFiles.length) {
+              saveDeliveryWithProof(proofUrls);
+            }
+          };
+          reader.readAsDataURL(proofFiles[i]);
+        }
+      } else {
+        saveDeliveryWithProof([]);
+      }
+      
+      function saveDeliveryWithProof(proofs) {
+        const newDelivery = {
+          id: deliveries.length > 0 ? Math.max(...deliveries.map(d => d.id)) + 1 : 1,
+          date: date,
+          supplier: supplier,
+          materialId: materialId,
+          materialName: material.name,
+          quantity: quantity,
+          unit: material.unit,
+          noteNumber: noteNumber,
+          receivedBy: receivedBy,
+          proofImages: proofs,
+          addedBy: currentUser ? currentUser.name : 'Unknown',
+          timestamp: new Date().toISOString()
+        };
+        
+        deliveries.push(newDelivery);
+        saveDeliveries();
+        displayDeliveries();
+        
+        // Update material quantities
+        material.initialQuantity += parseFloat(quantity);
+        material.currentQuantity += parseFloat(quantity);
+        
+        // Add to received history
+        material.received.push({
+          date: date,
+          quantity: parseFloat(quantity),
+          supplier: supplier,
+          note: noteNumber
+        });
+        
+        saveMaterials();
+        updateMaterialsStatus();
+        
+        // Clear form
+        document.getElementById('supplierName').value = '';
+        document.getElementById('deliveryQuantity').value = '';
+        document.getElementById('deliveryNoteNumber').value = '';
+        document.getElementById('receivedBy').value = '';
+        document.getElementById('deliveryProof').value = '';
+        document.getElementById('deliveryProofPreview').innerHTML = '';
+        
+        alert('Delivery note added successfully!');
+      }
+    }
+
+    function displayDeliveries() {
+      const tableBody = document.getElementById('deliveryNotesBody');
+      if (!tableBody) return;
+      
+      tableBody.innerHTML = '';
+      
+      deliveries.forEach(delivery => {
+        const material = materials.find(m => m.id == delivery.materialId);
+        const row = document.createElement('tr');
+        
+        let proofHtml = 'No proof';
+        if (delivery.proofImages && delivery.proofImages.length > 0) {
+          proofHtml = `<button class="btn btn-warning" onclick="viewProofImages(${delivery.id}, 'delivery')">View Proof (${delivery.proofImages.length})</button>`;
+        }
+        
+        row.innerHTML = `
+          <td>${new Date(delivery.date).toLocaleDateString()}</td>
+          <td>${delivery.supplier}</td>
+          <td>${delivery.materialName}</td>
+          <td>${delivery.quantity} ${delivery.unit}</td>
+          <td>${delivery.noteNumber}</td>
+          <td>${delivery.receivedBy}</td>
+          <td>${proofHtml}</td>
+          <td>
+            <button class="btn btn-danger" onclick="deleteDelivery(${delivery.id})">Delete</button>
+          </td>
+        `;
+        tableBody.appendChild(row);
+      });
+    }
+
+    function deleteDelivery(id) {
+      if (confirm('Are you sure you want to delete this delivery note?')) {
+        deliveries = deliveries.filter(d => d.id !== id);
+        saveDeliveries();
+        displayDeliveries();
+      }
+    }
+
+    // Vehicle Arrangement Management
+    function loadVehicleSchedules() {
+      const savedSchedules = localStorage.getItem('siteVehicleSchedules');
+      if (savedSchedules) {
+        vehicleSchedules = JSON.parse(savedSchedules);
+      } else {
+        vehicleSchedules = [];
+      }
+      displayVehicleSchedules();
+    }
+
+    function saveVehicleSchedules() {
+      localStorage.setItem('siteVehicleSchedules', JSON.stringify(vehicleSchedules));
+    }
+
+    function addVehicleArrangement() {
+      const date = document.getElementById('vehicleDate').value;
+      const type = document.getElementById('vehicleType').value;
+      const number = document.getElementById('vehicleNumber').value;
+      const driver = document.getElementById('driverName').value;
+      const purpose = document.getElementById('vehiclePurpose').value;
+      const time = document.getElementById('vehicleScheduleTime').value;
+      const notes = document.getElementById('vehicleNotes').value;
+      
+      if (!date || !type || !number || !driver || !purpose) {
+        alert('Please fill in all required fields');
+        return;
+      }
+      
+      const newSchedule = {
+        id: vehicleSchedules.length > 0 ? Math.max(...vehicleSchedules.map(v => v.id)) + 1 : 1,
+        date: date,
+        type: type,
+        number: number,
+        driver: driver,
+        purpose: purpose,
+        time: time,
+        notes: notes,
+        addedBy: currentUser ? currentUser.name : 'Unknown',
+        timestamp: new Date().toISOString()
+      };
+      
+      vehicleSchedules.push(newSchedule);
+      saveVehicleSchedules();
+      displayVehicleSchedules();
+      
+      // Clear form
+      document.getElementById('vehicleNumber').value = '';
+      document.getElementById('driverName').value = '';
+      document.getElementById('vehiclePurpose').value = '';
+      document.getElementById('vehicleScheduleTime').value = '';
+      document.getElementById('vehicleNotes').value = '';
+      
+      alert('Vehicle arrangement added successfully!');
+    }
+
+    function displayVehicleSchedules() {
+      const listContainer = document.getElementById('vehicleArrangementsList');
+      if (!listContainer) return;
+      
+      listContainer.innerHTML = '';
+      
+      const today = new Date().toISOString().split('T')[0];
+      const todaySchedules = vehicleSchedules.filter(s => s.date === today);
+      
+      if (todaySchedules.length === 0) {
+        listContainer.innerHTML = '<p>No vehicle arrangements for today.</p>';
+        return;
+      }
+      
+      todaySchedules.forEach(schedule => {
+        const scheduleDiv = document.createElement('div');
+        scheduleDiv.className = 'vehicle-schedule';
+        scheduleDiv.innerHTML = `
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h3>${schedule.type.toUpperCase()} - ${schedule.number}</h3>
+            <span>${schedule.time || 'Not specified'}</span>
+          </div>
+          <p><strong>Driver:</strong> ${schedule.driver}</p>
+          <p><strong>Purpose:</strong> ${schedule.purpose}</p>
+          ${schedule.notes ? `<p><strong>Notes:</strong> ${schedule.notes}</p>` : ''}
+          <p><strong>Added by:</strong> ${schedule.addedBy}</p>
+          <button class="btn btn-danger" onclick="deleteVehicleSchedule(${schedule.id})">Delete</button>
+        `;
+        listContainer.appendChild(scheduleDiv);
+      });
+    }
+
+    function deleteVehicleSchedule(id) {
+      if (confirm('Are you sure you want to delete this vehicle arrangement?')) {
+        vehicleSchedules = vehicleSchedules.filter(v => v.id !== id);
+        saveVehicleSchedules();
+        displayVehicleSchedules();
+      }
+    }
+
+    // Complaints Management
+    function loadComplaints() {
+      const savedComplaints = localStorage.getItem('siteComplaints');
+      if (savedComplaints) {
+        complaints = JSON.parse(savedComplaints);
+      } else {
+        complaints = [];
+      }
+      displayComplaints();
+    }
+
+    function saveComplaints() {
+      localStorage.setItem('siteComplaints', JSON.stringify(complaints));
+    }
+
+    function addComplaint() {
+      const date = document.getElementById('complaintDate').value;
+      const type = document.getElementById('complaintType').value;
+      const description = document.getElementById('complaintDescription').value;
+      const reporter = document.getElementById('complaintReporter').value;
+      const priority = document.getElementById('complaintPriority').value;
+      
+      if (!date || !type || !description || !reporter) {
+        alert('Please fill in all required fields');
+        return;
+      }
+      
+      const newComplaint = {
+        id: complaints.length > 0 ? Math.max(...complaints.map(c => c.id)) + 1 : 1,
+        date: date,
+        type: type,
+        description: description,
+        reporter: reporter,
+        priority: priority,
+        status: 'open',
+        addedBy: currentUser ? currentUser.name : 'Unknown',
+        timestamp: new Date().toISOString()
+      };
+      
+      complaints.push(newComplaint);
+      saveComplaints();
+      displayComplaints();
+      
+      // Clear form
+      document.getElementById('complaintDescription').value = '';
+      document.getElementById('complaintReporter').value = '';
+      
+      alert('Complaint submitted successfully!');
+    }
+
+    function displayComplaints() {
+      const listContainer = document.getElementById('complaintsList');
+      if (!listContainer) return;
+      
+      listContainer.innerHTML = '';
+      
+      if (complaints.length === 0) {
+        listContainer.innerHTML = '<p>No complaints submitted yet.</p>';
+        return;
+      }
+      
+      complaints.forEach(complaint => {
+        const complaintDiv = document.createElement('div');
+        complaintDiv.className = 'complaint-item';
+        complaintDiv.innerHTML = `
+          <div class="complaint-header">
+            <h3>${complaint.type.toUpperCase()} Complaint</h3>
+            <div class="complaint-status ${complaint.status === 'open' ? 'status-open' : 'status-resolved'}">
+              ${complaint.status === 'open' ? 'OPEN' : 'RESOLVED'} | ${complaint.priority.toUpperCase()}
+            </div>
+          </div>
+          <p><strong>Date:</strong> ${new Date(complaint.date).toLocaleDateString()}</p>
+          <p><strong>Reported by:</strong> ${complaint.reporter}</p>
+          <p><strong>Description:</strong> ${complaint.description}</p>
+          <p><strong>Added by:</strong> ${complaint.addedBy}</p>
+          <div style="margin-top: 10px;">
+            ${complaint.status === 'open' ? 
+              `<button class="btn btn-success" onclick="resolveComplaint(${complaint.id})">Mark as Resolved</button>` : 
+              ''}
+            <button class="btn btn-danger" onclick="deleteComplaint(${complaint.id})">Delete</button>
+          </div>
+        `;
+        listContainer.appendChild(complaintDiv);
+      });
+    }
+
+    function resolveComplaint(id) {
+      const complaint = complaints.find(c => c.id === id);
+      if (complaint) {
+        complaint.status = 'resolved';
+        saveComplaints();
+        displayComplaints();
+      }
+    }
+
+    function deleteComplaint(id) {
+      if (confirm('Are you sure you want to delete this complaint?')) {
+        complaints = complaints.filter(c => c.id !== id);
+        saveComplaints();
+        displayComplaints();
+      }
+    }
+
+    // Safety Incidents Management
+    function loadIncidents() {
+      const savedIncidents = localStorage.getItem('siteIncidents');
+      if (savedIncidents) {
+        incidents = JSON.parse(savedIncidents);
+      } else {
+        incidents = [];
+      }
+      displayIncidents();
+    }
+
+    function saveIncidents() {
+      localStorage.setItem('siteIncidents', JSON.stringify(incidents));
+    }
+
+    function addSafetyIncident() {
+      const dateTime = document.getElementById('incidentDateTime').value;
+      const type = document.getElementById('incidentType').value;
+      const description = document.getElementById('incidentDescription').value;
+      const location = document.getElementById('incidentLocation').value;
+      const reporter = document.getElementById('incidentReporter').value;
+      
+      if (!dateTime || !type || !description || !location || !reporter) {
+        alert('Please fill in all required fields');
+        return;
+      }
+      
+      // Handle proof images
+      const proofInput = document.getElementById('incidentProof');
+      const proofFiles = proofInput.files;
+      const proofUrls = [];
+      
+      if (proofFiles.length > 0) {
+        for (let i = 0; i < proofFiles.length; i++) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            proofUrls.push(e.target.result);
+            if (proofUrls.length === proofFiles.length) {
+              saveIncidentWithProof(proofUrls);
+            }
+          };
+          reader.readAsDataURL(proofFiles[i]);
+        }
+      } else {
+        saveIncidentWithProof([]);
+      }
+      
+      function saveIncidentWithProof(proofs) {
+        const newIncident = {
+          id: incidents.length > 0 ? Math.max(...incidents.map(i => i.id)) + 1 : 1,
+          dateTime: dateTime,
+          type: type,
+          description: description,
+          location: location,
+          reporter: reporter,
+          proofImages: proofs,
+          addedBy: currentUser ? currentUser.name : 'Unknown',
+          timestamp: new Date().toISOString()
+        };
+        
+        incidents.push(newIncident);
+        saveIncidents();
+        displayIncidents();
+        
+        // Clear form
+        document.getElementById('incidentDescription').value = '';
+        document.getElementById('incidentLocation').value = '';
+        document.getElementById('incidentReporter').value = '';
+        document.getElementById('incidentProof').value = '';
+        document.getElementById('incidentProofPreview').innerHTML = '';
+        
+        alert('Safety incident reported successfully!');
+      }
+    }
+
+    function displayIncidents() {
+      const listContainer = document.getElementById('safetyIncidentsList');
+      if (!listContainer) return;
+      
+      listContainer.innerHTML = '';
+      
+      if (incidents.length === 0) {
+        listContainer.innerHTML = '<p>No safety incidents reported yet.</p>';
+        return;
+      }
+      
+      incidents.forEach(incident => {
+        const incidentDiv = document.createElement('div');
+        incidentDiv.className = 'complaint-item';
+        
+        let proofHtml = 'No proof';
+        if (incident.proofImages && incident.proofImages.length > 0) {
+          proofHtml = `<button class="btn btn-warning" onclick="viewProofImages(${incident.id}, 'incident')">View Proof (${incident.proofImages.length})</button>`;
+        }
+        
+        incidentDiv.innerHTML = `
+          <div class="complaint-header">
+            <h3>${incident.type.toUpperCase()} Incident</h3>
+            <span>${new Date(incident.dateTime).toLocaleString()}</span>
+          </div>
+          <p><strong>Location:</strong> ${incident.location}</p>
+          <p><strong>Reported by:</strong> ${incident.reporter}</p>
+          <p><strong>Description:</strong> ${incident.description}</p>
+          <p><strong>Proof:</strong> ${proofHtml}</p>
+          <p><strong>Added by:</strong> ${incident.addedBy}</p>
+          <div style="margin-top: 10px;">
+            <button class="btn btn-danger" onclick="deleteIncident(${incident.id})">Delete</button>
+          </div>
+        `;
+        listContainer.appendChild(incidentDiv);
+      });
+    }
+
+    function deleteIncident(id) {
+      if (confirm('Are you sure you want to delete this safety incident?')) {
+        incidents = incidents.filter(i => i.id !== id);
+        saveIncidents();
+        displayIncidents();
+      }
+    }
+
+    // Damaged Materials Management
+    function loadDamagedMaterials() {
+      const savedDamaged = localStorage.getItem('siteDamagedMaterials');
+      if (savedDamaged) {
+        damagedMaterials = JSON.parse(savedDamaged);
+      } else {
+        damagedMaterials = [];
+      }
+      displayDamagedMaterials();
+    }
+
+    function saveDamagedMaterials() {
+      localStorage.setItem('siteDamagedMaterials', JSON.stringify(damagedMaterials));
+    }
+
+    function addDamagedMaterial() {
+      const date = document.getElementById('damageDate').value;
+      const materialId = document.getElementById('damagedMaterial').value;
+      const type = document.getElementById('damageType').value;
+      const quantity = document.getElementById('damageQuantity').value;
+      const description = document.getElementById('damageDescription').value;
+      
+      if (!date || !materialId || !type || !quantity || !description) {
+        alert('Please fill in all required fields');
+        return;
+      }
+      
+      const material = materials.find(m => m.id == materialId);
+      if (!material) {
+        alert('Invalid material selected');
+        return;
+      }
+      
+      // Handle proof images
+      const proofInput = document.getElementById('damageProof');
+      const proofFiles = proofInput.files;
+      const proofUrls = [];
+      
+      if (proofFiles.length > 0) {
+        for (let i = 0; i < proofFiles.length; i++) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            proofUrls.push(e.target.result);
+            if (proofUrls.length === proofFiles.length) {
+              saveDamagedWithProof(proofUrls);
+            }
+          };
+          reader.readAsDataURL(proofFiles[i]);
+        }
+      } else {
+        saveDamagedWithProof([]);
+      }
+      
+      function saveDamagedWithProof(proofs) {
+        const newDamaged = {
+          id: damagedMaterials.length > 0 ? Math.max(...damagedMaterials.map(d => d.id)) + 1 : 1,
+          date: date,
+          materialId: materialId,
+          materialName: material.name,
+          type: type,
+          quantity: quantity,
+          unit: material.unit,
+          description: description,
+          proofImages: proofs,
+          addedBy: currentUser ? currentUser.name : 'Unknown',
+          timestamp: new Date().toISOString()
+        };
+        
+        damagedMaterials.push(newDamaged);
+        saveDamagedMaterials();
+        displayDamagedMaterials();
+        
+        // Update material used (as damaged)
+        useMaterial(parseInt(materialId), parseFloat(quantity), 'Damaged');
+        
+        // Clear form
+        document.getElementById('damageQuantity').value = '';
+        document.getElementById('damageDescription').value = '';
+        document.getElementById('damageProof').value = '';
+        document.getElementById('damageProofPreview').innerHTML = '';
+        
+        alert('Damaged material reported successfully!');
+      }
+    }
+
+    function displayDamagedMaterials() {
+      const tableBody = document.getElementById('damagedMaterialsBody');
+      if (!tableBody) return;
+      
+      tableBody.innerHTML = '';
+      
+      damagedMaterials.forEach(damaged => {
+        let proofHtml = 'No proof';
+        if (damaged.proofImages && damaged.proofImages.length > 0) {
+          proofHtml = `<button class="btn btn-warning" onclick="viewProofImages(${damaged.id}, 'damaged')">View Proof (${damaged.proofImages.length})</button>`;
+        }
+        
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${new Date(damaged.date).toLocaleDateString()}</td>
+          <td>${damaged.materialName}</td>
+          <td>${damaged.type}</td>
+          <td>${damaged.quantity} ${damaged.unit}</td>
+          <td>${damaged.description}</td>
+          <td>${proofHtml}</td>
+          <td>
+            <button class="btn btn-danger" onclick="deleteDamagedMaterial(${damaged.id})">Delete</button>
+          </td>
+        `;
+        tableBody.appendChild(row);
+      });
+    }
+
+    function deleteDamagedMaterial(id) {
+      if (confirm('Are you sure you want to delete this damaged material report?')) {
+        damagedMaterials = damagedMaterials.filter(d => d.id !== id);
+        saveDamagedMaterials();
+        displayDamagedMaterials();
+      }
+    }
+
+    // Proof Image Viewer
+    function viewProofImages(id, type) {
+      let item;
+      if (type === 'delivery') {
+        item = deliveries.find(d => d.id === id);
+      } else if (type === 'incident') {
+        item = incidents.find(i => i.id === id);
+      } else if (type === 'damaged') {
+        item = damagedMaterials.find(d => d.id === id);
+      }
+      
+      if (!item || !item.proofImages || item.proofImages.length === 0) {
+        alert('No proof images available');
+        return;
+      }
+      
+      const proofContainer = document.createElement('div');
+      proofContainer.style.position = 'fixed';
+      proofContainer.style.top = '0';
+      proofContainer.style.left = '0';
+      proofContainer.style.width = '100%';
+      proofContainer.style.height = '100%';
+      proofContainer.style.backgroundColor = 'rgba(0,0,0,0.8)';
+      proofContainer.style.display = 'flex';
+      proofContainer.style.flexDirection = 'column';
+      proofContainer.style.alignItems = 'center';
+      proofContainer.style.justifyContent = 'center';
+      proofContainer.style.zIndex = '1000';
+      
+      const closeButton = document.createElement('button');
+      closeButton.textContent = 'Close';
+      closeButton.className = 'btn btn-danger';
+      closeButton.style.marginBottom = '20px';
+      closeButton.onclick = function() {
+        document.body.removeChild(proofContainer);
+      };
+      
+      const imagesContainer = document.createElement('div');
+      imagesContainer.style.display = 'flex';
+      imagesContainer.style.flexWrap = 'wrap';
+      imagesContainer.style.justifyContent = 'center';
+      imagesContainer.style.maxHeight = '80%';
+      imagesContainer.style.overflowY = 'auto';
+      
+      item.proofImages.forEach(imgSrc => {
+        const img = document.createElement('img');
+        img.src = imgSrc;
+        img.style.maxWidth = '90%';
+        img.style.maxHeight = '400px';
+        img.style.margin = '10px';
+        img.style.border = '2px solid white';
+        img.style.borderRadius = '5px';
+        imagesContainer.appendChild(img);
+      });
+      
+      proofContainer.appendChild(closeButton);
+      proofContainer.appendChild(imagesContainer);
+      document.body.appendChild(proofContainer);
+    }
+
+    // Export Functions
+    function exportMaterialsToExcel() {
+      // Create a new workbook
+      const wb = XLSX.utils.book_new();
+      
+      // Prepare data for Excel
+      const excelData = materials.map(material => {
+        const usage = material.initialQuantity - material.currentQuantity;
+        const usagePercentage = ((material.initialQuantity - material.currentQuantity) / material.initialQuantity) * 100;
+        return {
+          'Material Name': material.name,
+          'Category': material.category,
+          'Initial Quantity': material.initialQuantity,
+          'Current Quantity': material.currentQuantity,
+          'Minimum Level': material.minLevel,
+          'Unit': material.unit,
+          'Usage': usage,
+          'Usage %': usagePercentage.toFixed(1) + '%',
+          'Status': material.currentQuantity < material.minLevel ? 
+                   (material.currentQuantity <= 0 ? 'Out of Stock' : 'Low Stock') : 'In Stock'
+        };
+      });
+      
+      // Create worksheet
+      const ws = XLSX.utils.json_to_sheet(excelData);
+      
+      // Add worksheet to workbook
+      XLSX.utils.book_append_sheet(wb, ws, 'Materials Status');
+      
+      // Export to Excel file
+      XLSX.writeFile(wb, 'Materials_Status_' + new Date().toISOString().split('T')[0] + '.xlsx');
+    }
+
+    function exportMaterialsToPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      
+      // Add title
+      doc.setFontSize(16);
+      doc.text('Materials Status Report', 20, 20);
+      doc.setFontSize(12);
+      doc.text('Generated on: ' + new Date().toLocaleDateString(), 20, 30);
+      
+      // Prepare table data
+      const tableData = [];
+      tableData.push(['Material', 'Category', 'Current Stock', 'Min Level', 'Status']);
+      
+      materials.forEach(material => {
+        const status = material.currentQuantity < material.minLevel ? 
+                      (material.currentQuantity <= 0 ? 'Out of Stock' : 'Low Stock') : 'In Stock';
+        
+        tableData.push([
+          material.name,
+          material.category,
+          material.currentQuantity + ' ' + material.unit,
+          material.minLevel + ' ' + material.unit,
+          status
+        ]);
+      });
+      
+      // Add table to PDF
+      doc.autoTable({
+        startY: 40,
+        head: [tableData[0]],
+        body: tableData.slice(1),
+        theme: 'grid'
+      });
+      
+      // Save PDF
+      doc.save('Materials_Status_' + new Date().toISOString().split('T')[0] + '.pdf');
+    }
+
+    // Initialize with some sample data if needed
+    function initializeSampleData() {
+      // Check if we need to initialize sample data
+      if (!localStorage.getItem('siteUsers')) {
+        const sampleUsers = [
+          { 
+            id: 1, 
+            name: 'Admin User', 
+            username: adminEmail, 
+            password: 'admin123', 
+            role: 'admin', 
+            contact: '123-456-7890', 
+            site: 'Main Office',
+            status: 'approved',
+            registeredDate: new Date().toISOString() 
+          }
+        ];
+        localStorage.setItem('siteUsers', JSON.stringify(sampleUsers));
+      }
+    }
+
+    // Call initialization
+    initializeSampleData();
+
+    // Original functions for daily report management
+    function addLaborRow() {
+      const table = document.getElementById('laborTable').getElementsByTagName('tbody')[0];
+      const newRow = table.insertRow();
+      newRow.innerHTML = `
+        <td><input type="text" placeholder="Name"></td>
+        <td><input type="text" placeholder="Trade"></td>
+        <td><input type="number" placeholder="Hours"></td>
+        <td><input type="text" placeholder="Task description"></td>
+        <td><button class="btn btn-danger" onclick="removeLaborRow(this)">Remove</button></td>
+      `;
+      laborRowCount++;
+    }
+
+    function removeLaborRow(button) {
+      if (laborRowCount > 1) {
+        const row = button.parentNode.parentNode;
+        row.parentNode.removeChild(row);
+        laborRowCount--;
+      } else {
+        alert('At least one labor row is required');
+      }
+    }
+
+    function addCraneRow() {
+      const table = document.getElementById('craneTable').getElementsByTagName('tbody')[0];
+      const newRow = table.insertRow();
+      newRow.innerHTML = `
+        <td><input type="text" placeholder="Crane type"></td>
+        <td><input type="number" placeholder="Hours"></td>
+        <td><input type="text" placeholder="Operator name"></td>
+        <td><button class="btn btn-danger" onclick="removeCraneRow(this)">Remove</button></td>
+      `;
+      craneRowCount++;
+    }
+
+    function removeCraneRow(button) {
+      if (craneRowCount > 1) {
+        const row = button.parentNode.parentNode;
+        row.parentNode.removeChild(row);
+        craneRowCount--;
+      } else {
+        alert('At least one crane row is required');
+      }
+    }
+
+    function addBoomLoaderRow() {
+      const table = document.getElementById('boomLoaderTable').getElementsByTagName('tbody')[0];
+      const newRow = table.insertRow();
+      newRow.innerHTML = `
+        <td><input type="text" placeholder="Loader type"></td>
+        <td><input type="number" placeholder="Hours"></td>
+        <td><input type="text" placeholder="Operator name"></td>
+        <td><button class="btn btn-danger" onclick="removeBoomLoaderRow(this)">Remove</button></td>
+      `;
+      boomLoaderRowCount++;
+    }
+
+    function removeBoomLoaderRow(button) {
+      if (boomLoaderRowCount > 1) {
+        const row = button.parentNode.parentNode;
+        row.parentNode.removeChild(row);
+        boomLoaderRowCount--;
+      } else {
+        alert('At least one loader row is required');
+      }
+    }
+
+    function addMaterialRow() {
+      const table = document.getElementById('materialsTable').getElementsByTagName('tbody')[0];
+      const newRow = table.insertRow();
+      newRow.innerHTML = `
+        <td>
+          <select class="material-select">
+            <option value="">Select Material</option>
+          </select>
+        </td>
+        <td><input type="number" placeholder="Quantity" class="material-quantity"></td>
+        <td><input type="text" placeholder="Unit" class="material-unit" readonly></td>
+        <td><input type="text" placeholder="Location"></td>
+        <td><button class="btn btn-danger" onclick="removeMaterialRow(this)">Remove</button></td>
+      `;
+      materialRowCount++;
+      
+      // Update the select options for the new row
+      updateDailyReportMaterialSelects();
+    }
+
+    function removeMaterialRow(button) {
+      if (materialRowCount > 1) {
+        const row = button.parentNode.parentNode;
+        row.parentNode.removeChild(row);
+        materialRowCount--;
+      } else {
+        alert('At least one material row is required');
+      }
+    }
+
+    function signDocument(role) {
+      const signatureBox = document.getElementById(role + 'Signature');
+      signatureBox.textContent = 'Signed by ' + (currentUser ? currentUser.name : 'User') + ' on ' + new Date().toLocaleString();
+      signatureBox.classList.add('signed');
+    }
+
+    function saveDailyReport() {
+      // Collect all data from the form
+      const reportData = {
+        date: document.getElementById('sheetDate').value,
+        projectName: document.getElementById('projectName').value,
+        siteLocation: document.getElementById('siteLocation').value,
+        weather: document.getElementById('weatherConditions').value,
+        workCompleted: document.getElementById('workCompleted').value,
+        issues: document.getElementById('issuesChallenges').value,
+        remarks: document.getElementById('remarks').value,
+        labor: collectTableData('laborTable'),
+        cranes: collectTableData('craneTable'),
+        loaders: collectTableData('boomLoaderTable'),
+        materials: collectMaterialsUsed(),
+        supervisorSigned: document.getElementById('supervisorSignature').classList.contains('signed'),
+        managerSigned: document.getElementById('managerSignature').classList.contains('signed'),
+        timestamp: new Date().toISOString(),
+        savedBy: currentUser ? currentUser.name : 'Unknown'
+      };
+      
+      // Update material usage
+      let allMaterialsUsed = true;
+      reportData.materials.forEach(material => {
+        if (material.materialId && material.quantity) {
+          if (!useMaterial(parseInt(material.materialId), parseFloat(material.quantity), reportData.projectName)) {
+            allMaterialsUsed = false;
+          }
+        }
+      });
+      
+      if (!allMaterialsUsed) {
+        alert('Some materials could not be deducted from stock. Please check quantities.');
+        return;
+      }
+      
+      // Save to localStorage
+      const savedReports = JSON.parse(localStorage.getItem('savedDailyReports')) || [];
+      reportData.id = savedReports.length > 0 ? Math.max(...savedReports.map(r => r.id)) + 1 : 1;
+      savedReports.push(reportData);
+      localStorage.setItem('savedDailyReports', JSON.stringify(savedReports));
+      
+      alert('Daily report saved successfully!');
+      loadSavedReports();
+    }
+
+    function collectMaterialsUsed() {
+      const table = document.getElementById('materialsTable');
+      const rows = table.getElementsByTagName('tbody')[0].rows;
+      const data = [];
+      
+      for (let i = 0; i < rows.length; i++) {
+        const cells = rows[i].cells;
+        const materialSelect = cells[0].querySelector('.material-select');
+        const quantityInput = cells[1].querySelector('.material-quantity');
+        const unitInput = cells[2].querySelector('.material-unit');
+        const locationInput = cells[3].querySelector('input');
+        
+        if (materialSelect && materialSelect.value && quantityInput && quantityInput.value) {
+          data.push({
+            materialId: materialSelect.value,
+            materialName: materialSelect.options[materialSelect.selectedIndex].text,
+            quantity: quantityInput.value,
+            unit: unitInput.value,
+            location: locationInput ? locationInput.value : ''
+          });
+        }
+      }
+      
+      return data;
+    }
+
+    function collectTableData(tableId) {
+      const table = document.getElementById(tableId);
+      const rows = table.getElementsByTagName('tbody')[0].rows;
+      const data = [];
+      
+      for (let i = 0; i < rows.length; i++) {
+        const cells = rows[i].cells;
+        const rowData = {};
+        
+        for (let j = 0; j < cells.length - 1; j++) { // Skip the last cell (action buttons)
+          const input = cells[j].querySelector('input');
+          if (input) {
+            rowData[`col${j}`] = input.value;
+          }
+        }
+        
+        data.push(rowData);
+      }
+      
+      return data;
+    }
+
+    function loadSavedReports() {
+      const savedReports = JSON.parse(localStorage.getItem('savedDailyReports')) || [];
+      const listContainer = document.getElementById('savedReportsList');
+      
+      if (!listContainer) return;
+      
+      listContainer.innerHTML = '';
+      
+      if (savedReports.length === 0) {
+        listContainer.innerHTML = '<p>No saved reports yet.</p>';
+        return;
+      }
+      
+      savedReports.forEach(report => {
+        const reportItem = document.createElement('div');
+        reportItem.className = 'report-item';
+        reportItem.innerHTML = `
+          <div class="report-info">
+            <h3>${report.projectName} - ${new Date(report.date).toLocaleDateString()}</h3>
+            <p>Location: ${report.siteLocation} | Saved by: ${report.savedBy}</p>
+          </div>
+          <div class="report-actions">
+            <button class="btn btn-warning" onclick="loadReport(${report.id})">Load</button>
+            <button class="btn btn-danger" onclick="deleteReport(${report.id})">Delete</button>
+          </div>
+        `;
+        listContainer.appendChild(reportItem);
+      });
+    }
+
+    function loadReport(id) {
+      const savedReports = JSON.parse(localStorage.getItem('savedDailyReports')) || [];
+      const report = savedReports.find(r => r.id === id);
+      
+      if (!report) {
+        alert('Report not found');
+        return;
+      }
+      
+      // Populate the form with the report data
+      document.getElementById('sheetDate').value = report.date;
+      document.getElementById('projectName').value = report.projectName;
+      document.getElementById('siteLocation').value = report.siteLocation;
+      document.getElementById('weatherConditions').value = report.weather;
+      document.getElementById('workCompleted').value = report.workCompleted;
+      document.getElementById('issuesChallenges').value = report.issues;
+      document.getElementById('remarks').value = report.remarks;
+      
+      // Handle signatures
+      if (report.supervisorSigned) {
+        document.getElementById('supervisorSignature').textContent = 'Signed on ' + new Date(report.timestamp).toLocaleString();
+        document.getElementById('supervisorSignature').classList.add('signed');
+      }
+      
+      if (report.managerSigned) {
+        document.getElementById('managerSignature').textContent = 'Signed on ' + new Date(report.timestamp).toLocaleString();
+        document.getElementById('managerSignature').classList.add('signed');
+      }
+      
+      alert('Report loaded successfully!');
+    }
+
+    function deleteReport(id) {
+      if (confirm('Are you sure you want to delete this report?')) {
+        let savedReports = JSON.parse(localStorage.getItem('savedDailyReports')) || [];
+        savedReports = savedReports.filter(r => r.id !== id);
+        localStorage.setItem('savedDailyReports', JSON.stringify(savedReports));
+        loadSavedReports();
+      }
+    }
+
+    function printDailyReport() {
+      window.print();
+    }
+
+    function clearForm() {
+      if (confirm('Are you sure you want to clear the form? All unsaved data will be lost.')) {
+        document.getElementById('sheetDate').valueAsDate = new Date();
+        document.getElementById('projectName').value = '';
+        document.getElementById('siteLocation').value = '';
+        document.getElementById('weatherConditions').value = '';
+        document.getElementById('workCompleted').value = '';
+        document.getElementById('issuesChallenges').value = '';
+        document.getElementById('remarks').value = '';
+        
+        // Clear tables (keep one row each)
+        clearTable('laborTable', 1);
+        clearTable('craneTable', 1);
+        clearTable('boomLoaderTable', 1);
+        clearTable('materialsTable', 1);
+        
+        // Reset signatures
+        document.getElementById('supervisorSignature').textContent = 'Click to sign';
+        document.getElementById('supervisorSignature').classList.remove('signed');
+        document.getElementById('managerSignature').textContent = 'Click to sign';
+        document.getElementById('managerSignature').classList.remove('signed');
+        
+        // Reset photo preview
+        document.getElementById('photoPreview').innerHTML = '';
+        
+        // Update material selects
+        updateDailyReportMaterialSelects();
+      }
+    }
+
+    function clearTable(tableId, keepRows) {
+      const table = document.getElementById(tableId);
+      const tbody = table.getElementsByTagName('tbody')[0];
+      const rows = tbody.rows;
+      
+      while (rows.length > keepRows) {
+        tbody.deleteRow(rows.length - 1);
+      }
+      
+      // Clear the inputs in the remaining rows
+      for (let i = 0; i < keepRows; i++) {
+        const cells = rows[i].cells;
+        for (let j = 0; j < cells.length - 1; j++) {
+          const input = cells[j].querySelector('input');
+          if (input) {
+            input.value = '';
+          }
+          const select = cells[j].querySelector('select');
+          if (select) {
+            select.value = '';
+          }
+        }
+      }
+    }
+
+    // File preview functions
+    document.getElementById('sitePhotos').addEventListener('change', function(e) {
+      previewFiles(e.target, 'photoPreview');
+    });
+
+    document.getElementById('deliveryProof').addEventListener('change', function(e) {
+      previewFiles(e.target, 'deliveryProofPreview');
+    });
+
+    document.getElementById('incidentProof').addEventListener('change', function(e) {
+      previewFiles(e.target, 'incidentProofPreview');
+    });
+
+    document.getElementById('damageProof').addEventListener('change', function(e) {
+      previewFiles(e.target, 'damageProofPreview');
+    });
+
+    function previewFiles(input, previewContainerId) {
+      const previewContainer = document.getElementById(previewContainerId);
+      previewContainer.innerHTML = '';
+      
+      const files = input.files;
+      
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+          const previewItem = document.createElement('div');
+          previewItem.className = 'preview-item';
+          
+          // Determine file type and add appropriate badge
+          let fileTypeBadge = '';
+          if (file.name.toLowerCase().endsWith('.pdf')) {
+            fileTypeBadge = '<span class="file-type-badge badge-pdf">PDF</span>';
+          } else if (file.name.toLowerCase().endsWith('.dwg') || file.name.toLowerCase().endsWith('.dxf')) {
+            fileTypeBadge = '<span class="file-type-badge badge-cad">CAD</span>';
+          } else if (file.name.toLowerCase().includes('360') || file.type.includes('panorama')) {
+            fileTypeBadge = '<span class="file-type-badge badge-360">360°</span>';
+          }
+          
+          if (file.type.startsWith('image/')) {
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            img.className = 'preview-img';
+            previewItem.appendChild(img);
+            
+            // Add file type badge for 360 images
+            if (fileTypeBadge) {
+              const badgeContainer = document.createElement('div');
+              badgeContainer.style.position = 'absolute';
+              badgeContainer.style.top = '5px';
+              badgeContainer.style.left = '5px';
+              badgeContainer.innerHTML = fileTypeBadge;
+              previewItem.appendChild(badgeContainer);
+            }
+          } else if (file.type.startsWith('video/')) {
+            const video = document.createElement('video');
+            video.src = e.target.result;
+            video.controls = true;
+            video.className = 'preview-video';
+            previewItem.appendChild(video);
+          } else {
+            // For non-image/video files (PDF, CAD, etc.)
+            const fileIcon = document.createElement('div');
+            fileIcon.style.width = '100%';
+            fileIcon.style.height = '100%';
+            fileIcon.style.display = 'flex';
+            fileIcon.style.flexDirection = 'column';
+            fileIcon.style.alignItems = 'center';
+            fileIcon.style.justifyContent = 'center';
+            fileIcon.style.backgroundColor = '#f5f5f5';
+            
+            const fileIconText = document.createElement('div');
+            fileIconText.textContent = file.name;
+            fileIconText.style.textAlign = 'center';
+            fileIconText.style.padding = '10px';
+            fileIconText.style.wordBreak = 'break-word';
+            fileIconText.style.overflow = 'hidden';
+            
+            const fileTypeText = document.createElement('div');
+            fileTypeText.innerHTML = fileTypeBadge;
+            fileTypeText.style.marginTop = '10px';
+            
+            fileIcon.appendChild(fileIconText);
+            fileIcon.appendChild(fileTypeText);
+            previewItem.appendChild(fileIcon);
+          }
+          
+          const removeBtn = document.createElement('button');
+          removeBtn.textContent = '×';
+          removeBtn.className = 'remove-preview';
+          removeBtn.onclick = function() {
+            previewContainer.removeChild(previewItem);
+            // Also remove the file from the input
+            const newFiles = Array.from(input.files).filter(f => f !== file);
+            const dt = new DataTransfer();
+            newFiles.forEach(f => dt.items.add(f));
+            input.files = dt.files;
+          };
+          
+          previewItem.appendChild(removeBtn);
+          previewContainer.appendChild(previewItem);
+        };
+        
+        reader.readAsDataURL(file);
+      }
+    }
+
+    // Communication functions
+    function loadMessages() {
+      const savedMessages = localStorage.getItem('siteMessages');
+      if (savedMessages) {
+        messages = JSON.parse(savedMessages);
+      } else {
+        messages = [];
+      }
+      displayMessages();
+    }
+
+    function saveMessages() {
+      localStorage.setItem('siteMessages', JSON.stringify(messages));
+    }
+
+    function sendMessage() {
+      const messageInput = document.getElementById('messageInput');
+      const messageText = messageInput.value.trim();
+      
+      if (!messageText) return;
+      
+      const newMessage = {
+        id: messages.length > 0 ? Math.max(...messages.map(m => m.id)) + 1 : 1,
+        text: messageText,
+        sender: currentUser ? currentUser.name : 'Unknown',
+        timestamp: new Date().toISOString()
+      };
+      
+      messages.push(newMessage);
+      saveMessages();
+      displayMessages();
+      
+      messageInput.value = '';
+    }
+
+    function displayMessages() {
+      const chatMessages = document.getElementById('chatMessages');
+      if (!chatMessages) return;
+      
+      chatMessages.innerHTML = '';
+      
+      messages.forEach(message => {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${message.sender === (currentUser ? currentUser.name : 'Unknown') ? 'sent' : 'received'}`;
+        
+        messageDiv.innerHTML = `
+          <div class="message-sender">${message.sender}</div>
+          <div>${message.text}</div>
+          <div class="message-time">${new Date(message.timestamp).toLocaleTimeString()}</div>
+        `;
+        
+        chatMessages.appendChild(messageDiv);
+      });
+      
+      // Scroll to bottom
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function simulateOnlineUsers() {
+      const onlineUsers = document.getElementById('onlineUsers');
+      if (!onlineUsers) return;
+      
+      // Simulate some online users
+      const users = [
+        { name: 'John Foreman', role: 'Foreman', status: 'online' },
+        { name: 'Sarah Engineer', role: 'Engineer', status: 'online' },
+        { name: 'Mike Manager', role: 'Project Manager', status: 'away' },
+        { name: currentUser ? currentUser.name : 'You', role: currentUser ? currentUser.role : 'User', status: 'online' }
+      ];
+      
+      onlineUsers.innerHTML = '';
+      
+      users.forEach(user => {
+        const userDiv = document.createElement('div');
+        userDiv.className = 'user-info';
+        userDiv.innerHTML = `
+          <div class="user-avatar">${user.name.charAt(0)}</div>
+          <div>
+            <div>${user.name}</div>
+            <div style="font-size: 0.8em;">
+              <span class="status-indicator ${user.status === 'online' ? 'status-online' : 'status-offline'}"></span>
+              ${user.role}
+            </div>
+          </div>
+        `;
+        onlineUsers.appendChild(userDiv);
+      });
+    }
+
+    // Canvas functions for drawing
+    function setupCanvasEvents() {
+      if (!canvas) return;
+      
+      canvas.addEventListener('mousedown', startDrawing);
+      canvas.addEventListener('mousemove', draw);
+      canvas.addEventListener('mouseup', stopDrawing);
+      canvas.addEventListener('mouseout', stopDrawing);
+      
+      // Touch events for mobile devices
+      canvas.addEventListener('touchstart', handleTouchStart);
+      canvas.addEventListener('touchmove', handleTouchMove);
+      canvas.addEventListener('touchend', stopDrawing);
+    }
+
+    function startDrawing(e) {
+      isDrawing = true;
+      const rect = canvas.getBoundingClientRect();
+      lastX = e.clientX - rect.left;
+      lastY = e.clientY - rect.top;
+    }
+
+    function draw(e) {
+      if (!isDrawing) return;
+      
+      const rect = canvas.getBoundingClientRect();
+      const currentX = e.clientX - rect.left;
+      const currentY = e.clientY - rect.top;
+      
+      ctx.beginPath();
+      ctx.moveTo(lastX, lastY);
+      ctx.lineTo(currentX, currentY);
+      ctx.stroke();
+      
+      lastX = currentX;
+      lastY = currentY;
+    }
+
+    function stopDrawing() {
+      isDrawing = false;
+    }
+
+    function handleTouchStart(e) {
+      e.preventDefault();
+      const touch = e.touches[0];
+      const mouseEvent = new MouseEvent('mousedown', {
+        clientX: touch.clientX,
+        clientY: touch.clientY
+      });
+      canvas.dispatchEvent(mouseEvent);
+    }
+
+    function handleTouchMove(e) {
+      e.preventDefault();
+      const touch = e.touches[0];
+      const mouseEvent = new MouseEvent('mousemove', {
+        clientX: touch.clientX,
+        clientY: touch.clientY
+      });
+      canvas.dispatchEvent(mouseEvent);
+    }
+
+    function clearCanvas() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function setTool(tool) {
+      currentTool = tool;
+      
+      // Update active tool button
+      document.querySelectorAll('.drawing-tool').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      event.target.classList.add('active');
+      
+      // Set drawing properties based on tool
+      switch(tool) {
+        case 'pencil':
+          ctx.lineWidth = 2;
+          ctx.strokeStyle = '#000';
+          break;
+        case 'brush':
+          ctx.lineWidth = 5;
+          ctx.strokeStyle = '#000';
+          break;
+        case 'eraser':
+          ctx.lineWidth = 10;
+          ctx.strokeStyle = '#fff';
+          break;
+      }
+    }
+  </script>
+</body>
+</html>
